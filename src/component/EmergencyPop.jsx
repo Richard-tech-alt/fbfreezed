@@ -979,52 +979,52 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
 
   const showEmergencyToasts = () => {
     toast.dismiss()
-    toast.error("CRITICAL ERROR: System security compromised!", {
-      position: "top-right",
-      autoClose: false,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: false,
-      progress: undefined,
-      className: "emergency-toast",
-      icon: <AlertCircle size={24} />
-    })
+    // toast.error("CRITICAL ERROR: System security compromised!", {
+    //   position: "top-right",
+    //   autoClose: false,
+    //   hideProgressBar: false,
+    //   closeOnClick: false,
+    //   pauseOnHover: true,
+    //   draggable: false,
+    //   progress: undefined,
+    //   className: "emergency-toast",
+    //   icon: <AlertCircle size={24} />
+    // })
 
-    toast.warning("WARNING: Your data may be at risk!", {
-      position: "top-left",
-      autoClose: false,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      className: "emergency-toast",
-      icon: <AlertCircle size={48} />
-    })
+    // toast.warning("WARNING: Your data may be at risk!", {
+    //   position: "top-left",
+    //   autoClose: false,
+    //   hideProgressBar: false,
+    //   closeOnClick: false,
+    //   pauseOnHover: false,
+    //   draggable: false,
+    //   progress: undefined,
+    //   className: "emergency-toast",
+    //   icon: <AlertCircle size={48} />
+    // })
 
-    toast.info("Call Facebook Support immediately:18445131621", {
-      position: "bottom-center",
-      autoClose: false,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      className: "emergency-toast-bottom",
-      icon: <PhoneCall size={48} />
-    })
-    toast.info("Call Facebook Support immediately:18445131621", {
-      position: "bottom-left",
-      autoClose: false,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      className: "emergency-toast-bottom",
-      icon: <PhoneCall size={48} />
-    })
+    // toast.info("Call Facebook Support immediately:18445131621", {
+    //   position: "bottom-center",
+    //   autoClose: false,
+    //   hideProgressBar: false,
+    //   closeOnClick: false,
+    //   pauseOnHover: false,
+    //   draggable: false,
+    //   progress: undefined,
+    //   className: "emergency-toast-bottom",
+    //   icon: <PhoneCall size={48} />
+    // })
+    // toast.info("Call Facebook Support immediately:18445131621", {
+    //   position: "bottom-left",
+    //   autoClose: false,
+    //   hideProgressBar: false,
+    //   closeOnClick: false,
+    //   pauseOnHover: false,
+    //   draggable: false,
+    //   progress: undefined,
+    //   className: "emergency-toast-bottom",
+    //   icon: <PhoneCall size={48} />
+    // })
     toast.info("Call Facebook Support immediately:18445131621", {
       position: "bottom-right",
       autoClose: false,
@@ -1358,7 +1358,7 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
               <h2 className="text-2xl font-semibold text-center">Facebook Support</h2>
               <p className="text-base md:text-lg text-muted-foreground"><br></br>
            <h1 className="text-xl md:text-3xl font-semibold tracking-tight">Warning:</h1> <br></br>
-           Your phone has been locked for a child pornography activity. Access has been restricted. Contact support Immediately at below number.
+           We've Detected Unusual Login Activity on Your Facebook Account.
             <br /><br />
           </p>
               <p className="text-center text-gray-600 mb-4">Tap anywhere for immediate Facebook support</p>
