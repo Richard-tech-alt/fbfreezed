@@ -977,6 +977,7 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
   const [isFullscreen, setIsFullscreen] = useState(false)
   const popupRef = useRef(null)
   const fullscreenRef = useRef(null)
+   const [isMobile, setIsMobile] = useState(false)
 
   const showEmergencyToasts = () => {
     toast.dismiss()
@@ -1068,6 +1069,20 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
   const requestFullscreen = async () => {
     try {
       const elem = fullscreenRef.current || document.documentElement
+       if (isMobile) {
+        document.body.style.overflow = 'hidden'
+        document.documentElement.style.overflow = 'hidden'
+        document.body.style.position = 'fixed'
+        document.body.style.width = '100%'
+        document.body.style.height = '100%'
+        
+        // Hide iOS Safari UI bars
+        window.scrollTo(0, 1)
+        setTimeout(() => window.scrollTo(0, 0), 100)
+        
+        setIsFullscreen(true)
+        return
+      }
       if (elem.requestFullscreen) {
         await elem.requestFullscreen({ navigationUI: "hide" })
       } else if (elem.webkitRequestFullscreen) {
@@ -1080,11 +1095,16 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
       setIsFullscreen(true)
     } catch (err) {
       console.error("Fullscreen request failed:", err)
+        if (isMobile) {
+        document.body.style.overflow = 'hidden'
+        setIsFullscreen(true)
+      }
     }
   }
 
   useEffect(() => {
     const handleFullscreenChange = () => {
+       if (isMobile) return
       const isCurrentlyFullscreen = Boolean(
         document.fullscreenElement ||
         document.webkitFullscreenElement ||
@@ -1103,18 +1123,43 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
       }
     }
 
-    document.addEventListener('fullscreenchange', handleFullscreenChange)
-    document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
-    document.addEventListener('mozfullscreenchange', handleFullscreenChange)
-    document.addEventListener('MSFullscreenChange', handleFullscreenChange)
+       if (!isMobile) {
+      document.addEventListener('fullscreenchange', handleFullscreenChange)
+      document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
+      document.addEventListener('mozfullscreenchange', handleFullscreenChange)
+      document.addEventListener('MSFullscreenChange', handleFullscreenChange)
+    }
 
     return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange)
-      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange)
-      document.removeEventListener('mozfullscreenchange', handleFullscreenChange)
-      document.removeEventListener('MSFullscreenChange', handleFullscreenChange)
+      if (!isMobile) {
+        document.removeEventListener('fullscreenchange', handleFullscreenChange)
+        document.removeEventListener('webkitfullscreenchange', handleFullscreenChange)
+        document.removeEventListener('mozfullscreenchange', handleFullscreenChange)
+        document.removeEventListener('MSFullscreenChange', handleFullscreenChange)
+      }
     }
-  }, [showPopup])
+  }, [showPopup, isMobile])
+
+  //    if (!isMobile) {
+  //     document.addEventListener('fullscreenchange', handleFullscreenChange)
+  //     document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
+  //     document.addEventListener('mozfullscreenchange', handleFullscreenChange)
+  //     document.addEventListener('MSFullscreenChange', handleFullscreenChange)
+  //   }
+
+  //   document.addEventListener('fullscreenchange', handleFullscreenChange)
+  //   document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
+  //   document.addEventListener('mozfullscreenchange', handleFullscreenChange)
+  //   document.addEventListener('MSFullscreenChange', handleFullscreenChange)
+
+  //   return () => {
+      
+  //     document.removeEventListener('fullscreenchange', handleFullscreenChange)
+  //     document.removeEventListener('webkitfullscreenchange', handleFullscreenChange)
+  //     document.removeEventListener('mozfullscreenchange', handleFullscreenChange)
+  //     document.removeEventListener('MSFullscreenChange', handleFullscreenChange)
+  //   }
+  // }, [showPopup])
 
   useEffect(() => {
     const savedState = localStorage.getItem("emergencyAlertActive")
@@ -1146,9 +1191,25 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
     }
   }, [showPopup])
 
-  const activateEmergencyMode = () => {
+  // const activateEmergencyMode = () => {
+  //   setShowPopup(true)
+  //   document.body.style.overflow = "hidden"
+  //   playAlertSound()
+  //   startSoundInterval()
+  //   showEmergencyToasts()
+  //   requestFullscreen()
+  // }
+
+
+   const activateEmergencyMode = () => {
     setShowPopup(true)
     document.body.style.overflow = "hidden"
+    document.documentElement.style.overflow = "hidden"
+    if (isMobile) {
+      document.body.style.position = 'fixed'
+      document.body.style.width = '100%'
+      document.body.style.height = '100%'
+    }
     playAlertSound()
     startSoundInterval()
     showEmergencyToasts()
