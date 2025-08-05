@@ -1,6 +1,6 @@
 // import FacebookSupport from "./component/facebookContent"
 import { Route, Routes } from "react-router-dom"
-// import PopUp from "./component/PopUp"
+// import PopUp from "./component/PopUpjb"
 import EmergencyCall from "./component/EmergencyPop"
 import ReviewIdentityStep from "./component/SecondUi/SeondUi"
 import SuspiciousLoginAlert from "./component/FirstUi/FirstUi"
