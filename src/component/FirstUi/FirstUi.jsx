@@ -13,7 +13,7 @@ const SuspiciousLoginAlert = () => {
         navigate("/review-activity");
       }, 5000);
   
-      return () => clearTimeout(timer); // Cleanup to prevent memory leaksss
+      return () => clearTimeout(timer); // Cleanup to prevent memory leaksss ja
     }, [navigate]);
 
   return (

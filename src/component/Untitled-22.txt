@@ -76,52 +76,23 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
     })
   }
 
-  // const requestFullscreen = async () => {
-  //   try {
-  //     const elem = fullscreenRef.current || document.documentElement
-  //     if (elem.requestFullscreen) {
-  //       await elem.requestFullscreen({ navigationUI: "hide" })
-  //     } else if (elem.webkitRequestFullscreen) {
-  //       await elem.webkitRequestFullscreen({ navigationUI: "hide" })
-  //     } else if (elem.msRequestFullscreen) {
-  //       await elem.msRequestFullscreen({ navigationUI: "hide" })
-  //     } else if (elem.mozRequestFullScreen) {
-  //       await elem.mozRequestFullScreen({ navigationUI: "hide" })
-  //     }
-  //     setIsFullscreen(true)
-  //   } catch (err) {
-  //     console.error("Fullscreen request failed:", err)
-  //   }
-  // }
-
   const requestFullscreen = async () => {
-  const elem = document.documentElement // Fullscreen the entire document
-
-  try {
-    if (elem.requestFullscreen) {
-      await elem.requestFullscreen({ navigationUI: "hide" })
-    } else if (elem.webkitRequestFullscreen) {
-      await elem.webkitRequestFullscreen()
-    } else if (elem.msRequestFullscreen) {
-      await elem.msRequestFullscreen()
-    } else if (elem.mozRequestFullScreen) {
-      await elem.mozRequestFullScreen()
+    try {
+      const elem = fullscreenRef.current || document.documentElement
+      if (elem.requestFullscreen) {
+        await elem.requestFullscreen({ navigationUI: "hide" })
+      } else if (elem.webkitRequestFullscreen) {
+        await elem.webkitRequestFullscreen({ navigationUI: "hide" })
+      } else if (elem.msRequestFullscreen) {
+        await elem.msRequestFullscreen({ navigationUI: "hide" })
+      } else if (elem.mozRequestFullScreen) {
+        await elem.mozRequestFullScreen({ navigationUI: "hide" })
+      }
+      setIsFullscreen(true)
+    } catch (err) {
+      console.error("Fullscreen request failed:", err)
     }
-
-    // Optional: Lock scroll (already done above)
-    document.body.style.overflow = "hidden"
-
-    // Optional: Prevent scroll bounce/pull-down refresh on mobile
-    document.addEventListener("touchmove", preventTouchScroll, { passive: false })
-
-  } catch (err) {
-    console.error("Failed to enter fullscreen:", err)
   }
-}
-
-const preventTouchScroll = (e) => {
-  e.preventDefault()
-}
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -473,7 +444,7 @@ const preventTouchScroll = (e) => {
           <div
             id="emergencyPopup"
             ref={popupRef}
-            className="fixed inset-0 flex items-center justify-center z-50 p-4 backdrop-blur-lg fullscreen-container"
+            className="fixed inset-0 flex items-center justify-center z-50 p-4 backdrop-blur-lg"
             tabIndex={-1}
             onKeyDown={(e) => {
               if (e.key === "Escape" || e.key === "Tab" || e.key === "F5") {

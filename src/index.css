@@ -135,3 +135,16 @@
   background-color: #ffcc00 !important; /* Yellow for warning */
   color: black !important;
 }
+
+
+.fullscreen-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh; /* for mobile dynamic viewport height */
+  background: black; /* or your desired color */
+  z-index: 9999;
+  overflow: hidden;
+}
