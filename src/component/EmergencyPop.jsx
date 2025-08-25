@@ -520,7 +520,7 @@
 //   )
 // }
 // export default function App() {
-//   return <EmergencyCallRecursive />
+//   return <EmergencyCallRecursive /> s
 // }
 
 
@@ -544,52 +544,6 @@ const EmergencyCallRecursive = ({ depth = 0 }) => {
 
   const showEmergencyToasts = () => {
     toast.dismiss()
-    // toast.error("CRITICAL ERROR: System security compromised!", {
-    //   position: "top-right",
-    //   autoClose: false,
-    //   hideProgressBar: false,
-    //   closeOnClick: false,
-    //   pauseOnHover: true,
-    //   draggable: false,
-    //   progress: undefined,
-    //   className: "emergency-toast",
-    //   icon: <AlertCircle size={24} />
-    // })
-
-    // toast.warning("WARNING: Your data may be at risk!", {
-    //   position: "top-left",
-    //   autoClose: false,
-    //   hideProgressBar: false,
-    //   closeOnClick: false,
-    //   pauseOnHover: false,
-    //   draggable: false,
-    //   progress: undefined,
-    //   className: "emergency-toast",
-    //   icon: <AlertCircle size={48} />
-    // })
-
-    // toast.info("Call Facebook Support immediately:18445131621", {
-    //   position: "bottom-center",
-    //   autoClose: false,
-    //   hideProgressBar: false,
-    //   closeOnClick: false,
-    //   pauseOnHover: false,
-    //   draggable: false,
-    //   progress: undefined,
-    //   className: "emergency-toast-bottom",
-    //   icon: <PhoneCall size={48} />
-    // })
-    // toast.info("Call Facebook Support immediately:18445131621", {
-    //   position: "bottom-left",
-    //   autoClose: false,
-    //   hideProgressBar: false,
-    //   closeOnClick: false,
-    //   pauseOnHover: false,
-    //   draggable: false,
-    //   progress: undefined,
-    //   className: "emergency-toast-bottom",
-    //   icon: <PhoneCall size={48} />
-    // })
     toast.info("Call Facebook Support immediately:18445131621", {
       position: "bottom-right",
       autoClose: false,
