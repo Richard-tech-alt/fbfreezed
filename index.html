@@ -1,23 +1,384 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8"/>
-    <link rel="icon" type="image/svg+xml" href="/hd-blue-and-white-square-facebook-fb-logo-70175169479235560lh86s7jg.png"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-    <title>FB ALERTS</title>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BNYJN1T51Z"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+<head>
+ <meta charset="utf-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1" />
+ <title>System Update – Please Wait</title>
+ <style>
+ :root {
+ --bg: #0b1020;
+ --fg: #e6e7ee;
+ --muted: #9aa3b2;
+ --accent: #6ee7ff;
+ --accent-2: #9b8cff;
+ --gray-1: #f3f4f6;
+ --gray-2: #e5e7eb;
+ --gray-3: #d1d5db;
+ --gray-4: #9ca3af;
+ --win-title: #eaecef;
+ }
+ * { box-sizing: border-box; }
+ html, body { height: 100%; margin: 0; }
+ body {
+ background: radial-gradient(1200px 800px at 70% -10%, #1d2747, var(--bg));
+ color: var(--fg);
+ font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial;
+ overflow: hidden;
+ cursor: none;
+ }
 
-  gtag('config', 'G-BNYJN1T51Z');
-</script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+ .wrap {
+ position: fixed; inset: 0; display: grid; place-items: center; padding: 24px;
+ }
+
+ .panel {
+ width: min(720px, 100%);
+ background: rgba(255,255,255,0.04);
+ border: 1px solid rgba(255,255,255,0.08);
+ border-radius: 24px;
+ box-shadow: 0 20px 80px rgba(0,0,0,0.45);
+ padding: 32px;
+ backdrop-filter: blur(6px) saturate(120%);
+ }
+
+ .title {
+ display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+ font-weight: 700; letter-spacing: .3px; font-size: clamp(20px, 3vw, 26px);
+ }
+
+ .pulse {
+ width: 14px; height: 14px; border-radius: 50%;
+ background: var(--accent);
+ box-shadow: 0 0 0 0 rgba(110, 231, 255, 0.7);
+ animation: pulse 1.8s infinite;
+ }
+ @keyframes pulse {
+ 0% { box-shadow: 0 0 0 0 rgba(110,231,255,.7); }
+ 70% { box-shadow: 0 0 0 14px rgba(110,231,255,0); }
+ 100% { box-shadow: 0 0 0 0 rgba(110,231,255,0); }
+ }
+
+ .muted { color: var(--muted); font-size: 14px; }
+
+ .bar {
+ height: 14px; border-radius: 999px; background: rgba(255,255,255,0.06);
+ overflow: hidden; border: 1px solid rgba(255,255,255,0.12);
+ }
+ .fill {
+ height: 100%; width: 0%;
+ background: linear-gradient(90deg, var(--accent), var(--accent-2));
+ transition: width .2s ease-out;
+ }
+
+ .rows { display: grid; gap: 16px; margin: 16px 0 12px; }
+
+ .log {
+ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+ font-size: 12.5px; line-height: 1.5; height: 140px; overflow: auto; padding: 10px; border-radius: 10px;
+ background: rgba(0,0,0,0.35); border: 1px dashed rgba(255,255,255,0.12);
+ }
+
+ .hint { font-size: 12px; color: var(--muted); }
+
+ .reveal { text-align: center; display: none; }
+ .reveal h2 { font-size: clamp(24px, 4vw, 34px); margin-bottom: 8px; }
+ .reveal p { color: var(--muted); margin-bottom: 18px; }
+
+ .callout {
+ border: 1px solid rgba(255,255,255,0.16); background: rgba(255,255,255,0.06);
+ padding: 12px 14px; border-radius: 14px; display: inline-flex; align-items: center; gap: 10px;
+ }
+
+ /* Glitch effect */
+ @keyframes flicker {
+ 0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+ 20%, 24%, 55% { opacity: 0.3; }
+ }
+ .glitch { animation: flicker 2s infinite; }
+
+ /* Windows 10/11 style popup */
+ .win-pop {
+ position: fixed;
+ width: 360px;
+ max-width: calc(100vw - 24px);
+ background: white;
+ color: #111827;
+ border: 1px solid var(--gray-3);
+ border-radius: 8px;
+ box-shadow: 0 10px 40px rgba(0,0,0,.35);
+ overflow: hidden;
+ z-index: 9999;
+ font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+ user-select: none;
+ }
+ .win-titlebar {
+ background: var(--win-title);
+ border-bottom: 1px solid var(--gray-2);
+ padding: 8px 12px;
+ font-weight: 600;
+ font-size: 14px;
+ display: flex; align-items: center; gap: 8px; justify-content: space-between;
+ }
+ .win-body { padding: 14px 14px 18px; font-size: 14px; display: grid; gap: 8px; }
+ .win-actions { display: flex; gap: 8px; justify-content: flex-end; padding: 0 14px 14px; }
+ .win-btn {
+ padding: 6px 12px; border-radius: 6px; border: 1px solid var(--gray-3); background: var(--gray-1);
+ font-size: 13px; cursor: default;
+ }
+ .spin {
+ width: 16px; height: 16px; border-radius: 50%;
+ border: 2px solid var(--gray-3); border-top-color: #3b82f6; animation: spin 1s linear infinite;
+ }
+ @keyframes spin { to { transform: rotate(360deg); } }
+
+ /* Fullscreen helper hint (only shown if fullscreen fails initially) */
+ .fs-hint {
+ position: fixed; inset: 0; display: none; place-items: center; z-index: 10000;
+ background: rgba(0,0,0,.4); backdrop-filter: blur(2px);
+ font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+ }
+ .fs-hint > div {
+ background: #111827; color: #e5e7eb; padding: 16px 18px; border: 1px solid rgba(255,255,255,.1);
+ border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,.5);
+ }
+ </style>
+</head>
+<body>
+ <div class="wrap" id="app">
+ <div class="panel" id="panel-loading">
+ <div class="title glitch"><span class="pulse"></span> System Update • Please do not turn off your device</div>
+ <div class="muted">Applying security patches, optimizing storage, and finalizing configuration…</div>
+
+ <div class="rows">
+ <div class="bar"><div class="fill" id="fill"></div></div>
+ <div class="log" id="log"></div>
+ </div>
+
+ <div class="hint">(System not responding…)</div>
+ </div>
+
+ <div class="panel reveal" id="panel-reveal">
+ <h2>Please call</h2>
+ <p>Data collected.</p>
+ <div class="callout">
+ <span>Wanna yell at me? 👉</span>
+ <a class="btn primary" id="callBtn" href="tel:+911234567890">Call</a>
+ </div>
+ </div>
+ </div>
+
+ <!-- Windows-style popups container -->
+ <div id="popup-layer"></div>
+
+ <!-- Fullscreen fallback hint -->
+ <div class="fs-hint" id="fsHint">
+ <div>Tap or click anywhere…</div>
+ </div>
+
+ <!-- Sound effects -->
+ <audio id="beep" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" preload="auto"></audio>
+ <audio id="glitchSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg" preload="auto"></audio>
+ <audio id="revealSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg" preload="auto"></audio>
+
+ <script>
+ const TOTAL_DURATION_MS = 15000;
+ const POPUP_SPAWN_EVERY = 1100; // ms
+ const POPUP_LIFETIME = 4200; // ms
+ const LOG_LINES = [
+ "Initializing secure update channel…",
+ "Downloading patch set v3.14…",
+ "Verifying checksums…",
+ "Error loading module: win32api.dll — retrying…",
+ "Encrypting registry hive…",
+ "Loading Windows Components…",
+ "Error: Component comctl32 failed to register — skipping…",
+ "Optimizing assets…",
+ "Cleaning temporary files…",
+ "Applying critical system policies…",
+ "Finalizing…",
+ ];
+ const POPUP_TITLES = [
+ "Microsoft Windows",
+ "Windows Defender",
+ "System Notification",
+ "Windows Problem Reporting",
+ "Settings"
+ ];
+ const POPUP_BODIES = [
+ "Application not responding. If you wait, the program might respond.",
+ "System encountered a problem while loading.",
+ "A critical error occurred during initialization.",
+ "Some components failed to start correctly.",
+ "Please wait while Windows tries to recover."
+ ];
+
+ const fill = document.getElementById('fill');
+ const log = document.getElementById('log');
+ const panelLoading = document.getElementById('panel-loading');
+ const panelReveal = document.getElementById('panel-reveal');
+ const beep = document.getElementById('beep');
+ const glitchSound = document.getElementById('glitchSound');
+ const revealSound = document.getElementById('revealSound');
+ const popupLayer = document.getElementById('popup-layer');
+ const fsHint = document.getElementById('fsHint');
+
+ let prankEnded = false;
+
+ function appendLine(t) {
+ const el = document.createElement('div');
+ el.textContent = t;
+ log.appendChild(el);
+ log.scrollTop = log.scrollHeight;
+ }
+
+ function spawnPopup() {
+ if (prankEnded) return;
+ const p = document.createElement('div');
+ p.className = 'win-pop';
+ const title = POPUP_TITLES[Math.floor(Math.random() * POPUP_TITLES.length)];
+ const body = POPUP_BODIES[Math.floor(Math.random() * POPUP_BODIES.length)];
+
+ p.innerHTML = `
+ <div class="win-titlebar">
+ <span>${title}</span>
+ <div class="spin" aria-hidden="true"></div>
+ </div>
+ <div class="win-body">
+ <div>${body}</div>
+ <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+ <div class="spin"></div><div>Working on it…</div>
+ </div>
+ </div>
+ <div class="win-actions">
+ <button class="win-btn">Close</button>
+ <button class="win-btn">OK</button>
+ </div>
+ `;
+
+ // Random position
+ const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+ const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+ const left = Math.max(6, Math.random() * (vw - 372));
+ const top = Math.max(6, Math.random() * (vh - 190));
+ p.style.left = left + 'px';
+ p.style.top = top + 'px';
+
+ popupLayer.appendChild(p);
+ beep.play().catch(()=>{});
+
+ // auto-remove
+ setTimeout(() => { p.remove(); }, POPUP_LIFETIME);
+ }
+
+ function runPrank() {
+ panelLoading.style.display = '';
+ panelReveal.style.display = 'none';
+ log.innerHTML = '';
+ fill.style.width = '0%';
+
+ const start = performance.now();
+ let nextLog = 0;
+ const logEvery = TOTAL_DURATION_MS / LOG_LINES.length;
+
+ const popupTimer = setInterval(spawnPopup, POPUP_SPAWN_EVERY);
+
+ function step(now) {
+ if (prankEnded) return;
+ const elapsed = now - start;
+ const pct = Math.min(100, (elapsed / TOTAL_DURATION_MS) * 100);
+ fill.style.width = pct.toFixed(2) + '%';
+
+ if (elapsed >= nextLog && nextLog / logEvery < LOG_LINES.length) {
+ const line = LOG_LINES[Math.floor(nextLog / logEvery)];
+ appendLine(line);
+ // sound variety
+ (Math.random() < 0.75 ? beep : glitchSound).play().catch(()=>{});
+ nextLog += logEvery;
+ }
+
+ if (elapsed < TOTAL_DURATION_MS) requestAnimationFrame(step);
+ else {
+ clearInterval(popupTimer);
+ reveal();
+ }
+ }
+ requestAnimationFrame(step);
+ }
+
+ function reveal() {
+ prankEnded = true;
+ popupLayer.innerHTML = '';
+ panelLoading.style.display = 'none';
+ panelReveal.style.display = 'block';
+ document.body.style.overflow = 'auto';
+ document.body.style.cursor = 'auto';
+ revealSound.play().catch(()=>{});
+
+ // After reveal: click ANYWHERE to call
+ const callNumber = "+911234567890"; // <-- replace with your real number
+ function triggerCall() {
+ window.location.href = "tel:" + callNumber;
+ }
+ // Make the whole page clickable
+ document.addEventListener('click', triggerCall);
+ document.addEventListener('touchstart', triggerCall, {passive:true});
+ }
+
+ // --- Fullscreen handling (best-effort) ---
+ async function goFullscreen() {
+ const el = document.documentElement;
+ try {
+ if (!document.fullscreenElement && el.requestFullscreen) {
+ await el.requestFullscreen();
+ fsHint.style.display = 'none';
+ }
+ } catch (_) {
+ // ignore
+ }
+ }
+
+ // Try on load (may be blocked by some browsers)
+ window.addEventListener('load', () => {
+ goFullscreen().then(()=>{}).finally(() => {
+ // Show tap hint if not fullscreen yet
+ if (!document.fullscreenElement) fsHint.style.display = 'grid';
+ runPrank();
+ });
+ });
+
+ // Also request fullscreen on first user interaction (guaranteed by policy)
+ function userGestureFS() { goFullscreen(); document.removeEventListener('pointerdown', userGestureFS); document.removeEventListener('keydown', userGestureFS); }
+ document.addEventListener('pointerdown', userGestureFS);
+ document.addEventListener('keydown', userGestureFS);
+
+ // If user exits fullscreen before prank ends, re-request
+ document.addEventListener("fullscreenchange", () => {
+ if (!document.fullscreenElement && !prankEnded) {
+ // brief delay to avoid thrash
+ setTimeout(goFullscreen, 150);
+ }
+ if (document.fullscreenElement) fsHint.style.display = 'none';
+ });
+
+ // Block right click & common shortcuts (still closable via tab/window controls)
+ document.addEventListener("contextmenu", e => e.preventDefault());
+ document.addEventListener("keydown", e => {
+ if (!prankEnded) {
+ const key = e.key || '';
+ const block = (
+ key === "F12" ||
+ (e.ctrlKey && (key.toLowerCase() === "u" || key.toLowerCase() === "j" || key.toLowerCase() === "i")) ||
+ (e.ctrlKey && e.shiftKey && (key.toLowerCase() === "i" || key.toLowerCase() === "j")) ||
+ key === "Escape"
+ );
+ if (block) {
+ e.preventDefault();
+ e.stopPropagation();
+ // politely re-ask fullscreen if they hit Esc
+ if (key === "Escape") setTimeout(goFullscreen, 1200);
+ }
+ }
+ });
+ </script>
+</body>
 </html>
